@@ -1,0 +1,8 @@
+Django==1.7
+Pillow==2.5.3
+django-oauth2-provider==0.2.6.1
+django-tastypie==0.12.0
+python-dateutil==2.2
+python-mimeparse==0.1.4
+shortuuid==0.4.2
+six==1.8.0
