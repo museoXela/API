@@ -7,7 +7,7 @@ class Mantenimiento(models.Model):
 	fecha = models.DateField(auto_now=True, blank=True, null=True)
 	consolidacion = models.ForeignKey('operaciones.models.Consolidacion')
 
-class Consolidacion(model.Model):
+class Consolidacion(models.Model):
 	limpieza= models.BooleanField(default=False)
 	fechaInicio = models.DateField(auto_now=True,blank=True,null=True)
 	fechaFin = models.DateField(blank=True,null=True)
