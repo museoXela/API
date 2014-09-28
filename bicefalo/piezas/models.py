@@ -1,25 +1,30 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 from django.db import models
-from usuarios.models import Perfil
 from countries.models import Country
-from colecciones.models import Clasificacion
-from operaciones.models import Mantenimiento
+
 
 class Autor(models.Model):
     pais = models.ForeignKey(Country, related_name='autores')
-    nombre = models.CharField()
-    apellido = models.CharField()
+    nombre = models.CharField(max_length=50)
+    apellido = models.CharField(max_length=50)
     
+    class Meta:
+        db_table='Autor'
+        verbose_name='autor'
+        verbose_name_plural='autores'
+        
     def __unicode__(self):
         return self.nombre + ' ' + self.apellido
     
     
 class Pieza(models.Model):
+    from usuarios.models import Perfil
     prepopulated_fields = {'slug':('codigoSlug',)}
-    
-    #Definici�n de campos
+    #Definicion de campos
     codigo = models.CharField(primary_key=True, max_length=20)
     codigoSlug = models.SlugField()
-    clasificacion = models.ForeignKey(Clasificacion, related_name='piezas')
+    clasificacion = models.ForeignKey('Clasificacion', related_name='piezas')
     autor = models.ForeignKey(Autor, blank=True, related_name='creaciones')
     responsableRegistro = models.ForeignKey(Perfil, related_name='piezas_registradas')
     registroIDAEH = models.BooleanField(default=False, blank=True)
@@ -40,14 +45,40 @@ class Pieza(models.Model):
     largo = models.FloatField(blank=True)
     diametro = models.FloatField(blank=True)
     
+    class Meta:
+        db_table='Pieza'
+        verbose_name='pieza'
+        verbose_name_plural='piezas'
+    
     def __unicode__(self):
         return self.codigo
 
 class Fotografia(models.Model):
-    mantenimiento = models.ForeignKey(Mantenimiento, blank=True, null=True)
+    from operaciones.models import Mantenimiento
+    mantenimiento = models.ForeignKey(Mantenimiento, blank=True, related_name='mantenimiento')
     pieza = models.ForeignKey(Pieza, blank=True, null=True)
     tipo = models.SmallIntegerField(blank=True)
     ruta = models.ImageField(upload_to='piezas')
     perfil = models.BooleanField(default=True)
     
+    class Meta:
+        db_table='Fotografia'
+        verbose_name='fotografía'
+        verbose_name_plural='fotografías'
+        
+class Clasificacion(models.Model):
+    from registro.models import Ficha
+    from colecciones.models import Coleccion, Categoria
+    coleccion = models.ForeignKey(Coleccion, related_name="clasificaciones")
+    categoria = models.ForeignKey(Categoria, related_name="clasificaciones")
+    ficha = models.ForeignKey(Ficha, related_name="clasificaciones")
+    nombre = models.CharField(max_length=50, null=False)
+    codigo = models.CharField(max_length=50, unique=True)
     
+    class Meta:
+        db_table='Clasificacion'
+        verbose_name='clasificación'
+        verbose_name_plural = 'clasificaciones'
+        
+    def __unicode__(self):
+        return self.nombre
