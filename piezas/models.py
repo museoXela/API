@@ -20,7 +20,7 @@ class Pieza(models.Model):
     codigo = models.CharField(primary_key=True, max_length=20)
     codigoSlug = models.SlugField()
     clasificacion = models.ForeignKey(Clasificacion, related_name='piezas')
-    autor = models.ForeignKey(Autor, blank=True)
+    autor = models.ForeignKey(Autor, blank=True, related_name='creaciones')
     responsableRegistro = models.ForeignKey(Perfil, related_name='piezas_registradas')
     registroIDAEH = models.BooleanField(default=False, blank=True)
     codigoIDAEH = models.CharField(max_length=25, blank=True, null=False)
