@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'piezas',
     'registro',
     'usuarios',
+    'operaciones',
 )
 
 MIDDLEWARE_CLASSES = (

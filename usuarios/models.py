@@ -27,7 +27,7 @@ class Publicacion(models.Model):
     autor = models.ForeignKey(Perfil, related_name='publicaciones')
     fecha = models.DateField(auto_now=True, blank=True, null=True)
     nombre = models.CharField(max_length=140)
-    publicacion = models.CharField()
+    publicacion = models.CharField(max_length=200)
     link = models.URLField()
     
     def __unicode__(self):

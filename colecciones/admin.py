@@ -1,4 +1,4 @@
 from django.contrib import admin
-from models import Categoria, Clasificacion, Coleccion 
+from models import Categoria, Coleccion 
 
-admin.site.register(Categoria, Coleccion, Clasificacion)
+admin.site.register([Categoria, Coleccion])

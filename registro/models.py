@@ -1,9 +1,7 @@
 from django.db import models
-from piezas.models import Pieza
-from operaciones.models import Consolidacion
 
 class Ficha(models.Model):
-    nombre = models.CharField(unique=True)
+    nombre = models.CharField(unique=True,max_length=50)
     estructura = models.TextField()
     consolidacion = models.BooleanField(default=False)
     
@@ -11,8 +9,10 @@ class Ficha(models.Model):
         return self.nombre
     
 class Registro(models.Model):
-    registroPieza = models.ForeignKey(Pieza, blank=True, null=True, related_name='registro')
-    registroConsolidacion = models.ForeignKey(Consolidacion, blank=True, null=True, related_name='registro')
+    from operaciones.models import Consolidacion
+    from piezas.models import Pieza
+    registroPieza = models.ForeignKey(Pieza,blank=True, related_name='registro')
+    registroConsolidacion = models.ForeignKey(Consolidacion, blank=True, related_name='registro')
     fecha = models.DateField(auto_now=True)
     consolidacion = models.BooleanField(default=False)
 
@@ -20,7 +20,7 @@ class Registro(models.Model):
         return self.pk + '-' + unicode(self.fecha)
 
 class Campo(models.Model):
-    registro = models.ForeignKey(Registro, related_name='detalle')
+    registro = models.ForeignKey('Registro', related_name='detalle')
     campoEstructura= models.IntegerField()
     tipoCampo = models.SmallIntegerField()
     valorTexto = models.CharField(max_length=50, blank=True, null=True)
@@ -33,6 +33,6 @@ class Campo(models.Model):
         return self.registro + ' -detalle- ' + unicode(self.campoEstructura)
     
 class ValorCheck(models.Model):
-    campo = models.ForeignKey(Campo,related_name='valorCheck')
+    campo = models.ForeignKey('Campo',related_name='valorCheck')
     nombre = models.CharField(max_length=45)
-    seleccionado = models.BooleanField()
+    seleccionado = models.BooleanField(default=False)
