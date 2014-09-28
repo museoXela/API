@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
 from django.db import models
-from bicefalo.countries.models import Country
+from countries.models import Country
 
 # Create your models here.
 class Perfil(models.Model):
