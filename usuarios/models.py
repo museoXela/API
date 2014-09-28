@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
 from django.db import models
@@ -19,7 +20,11 @@ class Perfil(models.Model):
     filiacionAcademica = models.CharField(max_length=50, null= True, blank=True)
     biografia = models.CharField(max_length=140, null=True, blank=True) 
 
-    
+    class Meta:
+        db_table='UserDetail'
+        verbose_name='perfil de usuario'
+        verbose_name_plural = 'perfiles de usuario'
+        
     def __unicode__(self):
         return self.usuario.get_username()
     
@@ -30,6 +35,11 @@ class Publicacion(models.Model):
     publicacion = models.CharField(max_length=200)
     link = models.URLField()
     
+    class Meta:
+        db_table='Publicacion'
+        verbose_name='publicación'
+        verbose_name_plural='publicaciones'  
+          
     def __unicode__(self):
         return self.nombre
     
