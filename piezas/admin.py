@@ -1,3 +1,4 @@
 from django.contrib import admin
+from models import Autor, Fotografia, Pieza
 
-# Register your models here.
+admin.site.register(Autor, Fotografia, Pieza)

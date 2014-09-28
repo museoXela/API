@@ -40,6 +40,11 @@ INSTALLED_APPS = (
     'provider.oauth2',
     'tastypie',
     'countries',
+    'colecciones',
+    'investigacion',
+    'piezas',
+    'registro',
+    'usuarios',
 )
 
 MIDDLEWARE_CLASSES = (
