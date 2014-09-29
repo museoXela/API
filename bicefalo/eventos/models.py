@@ -7,4 +7,4 @@ class Eventos (models.Model):
     aficeh =models.TextField(null=True,blank=True)
     fecha=models.DateField(auto_now=True, blank=True, null=True)
     sala=models.ForeignKey('traslados.models.Sala')
-    usuario =models.ForeignKey('usuarios.models.usuario')
+    usuario =models.ForeignKey('usuarios.models.Usuario')
