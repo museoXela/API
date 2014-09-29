@@ -23,7 +23,7 @@ class Investigacion(models.Model):
         return unicode(self.editor) + '-' + unicode(self.titulo)
 
 class LinkInvestigacion(models.Model):
-    investigacion = models.ForeignKey(Investigacion)
+    investigacion = models.ForeignKey(Investigacion, related_name='links')
     link = models.URLField()
     
     class Meta:

@@ -26,7 +26,7 @@ class Registro(models.Model):
     class Meta:
         db_table='Registro'
         verbose_name='registro de pieza'
-        verbose_name='registro de piezas'
+        verbose_name_plural='registro de piezas'
         
     def __unicode__(self):
         return self.pk + '-' + unicode(self.fecha)
