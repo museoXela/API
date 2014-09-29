@@ -2,43 +2,49 @@
 	{
     "model": "colecciones.Coleccion",
     "pk": 1,
-    "fields": {
-      "nombre": "Colección Prehispánica"
+    "fields": 
+    	{
+      		"nombre": "Colección Prehispánica"
     	}
   	},
   	{
-    "model": "colecciones.Coleccion",
-    "pk": 2,
-    "fields": {
-      "nombre": "Colección Histórica"
+    	"model": "colecciones.Coleccion",
+    	"pk": 2,
+    	"fields": 
+    	{
+      		"nombre": "Colección Histórica"
     	}
   	},
   	{
-    "model": "colecciones.Coleccion",
-    "pk": 3,
-    "fields": {
-      "nombre": "Colección Archivo Histórico"
+    	"model": "colecciones.Coleccion",
+    	"pk": 3,
+    	"fields": 
+    	{
+      		"nombre": "Colección Archivo Histórico"
     	}
   	},
   	{
-    "model": "colecciones.Coleccion",
-    "pk": 4,
-    "fields": {
-      "nombre": "Colección Fototeca"
+    	"model": "colecciones.Coleccion",
+    	"pk": 4,
+    	"fields": 
+    	{
+      		"nombre": "Colección Fototeca"
     	}
   	},
   	{
-    "model": "colecciones.Coleccion",
-    "pk": 5,
-    "fields": {
-      "nombre": "Colección Zoológica"
+    	"model": "colecciones.Coleccion",
+    	"pk": 5,
+    	"fields": 
+    	{
+      		"nombre": "Colección Zoológica"
     	}
   	},
   	{
-    "model": "colecciones.Categoria",
-    "pk": 1,
-    "fields": {
-      "nombre": "Cerámica"
+    	"model": "colecciones.Categoria",
+    	"pk": 1,
+    	"fields": 
+    	{
+      		"nombre": "Cerámica"
     	}
   	},
   	{
@@ -128,15 +134,17 @@
   	{
     "model": "colecciones.Categoria",
     "pk": 14,
-    "fields": {
+    "fields": 
+    {
       "nombre": "Moluscos"
-    	}
+    }
   	},
+  	
   	{
     "model": "colecciones.Categoria",
     "pk": 15,
     "fields": {
       "nombre": "Anfibios"
     	}
-  	},
+  	}
 ]

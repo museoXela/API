@@ -1,0 +1,30 @@
+[
+	{
+    "model": "registro.Ficha",
+    "pk": 1,
+    "fields": 
+    	{
+      		"nombre": "Ficha de ejemplo",
+      		"estructura":"{
+								"campos": [
+								{"id":1,"tipo":1, "descripcion": "Nombre de la pieza"},
+								{"id":2,"tipo":2, "descripcion": "Observaciones"},
+								{"id":3,"tipo":3, "descripcion": "Fecha de registro"},
+								{"id":4,"tipo":4, "descripcion": "Valor monetario"},
+								{"id":5, "tipo":5, "descripcion": "Lugar de procedencia:",
+								"opciones":[
+									"Quetzaltenango",
+									"Jutiapa",
+									"Cualquier lado"
+								]},
+								{"id":6, "tipo":6, "descripcion": "Materiales",
+								"opciones":[
+									"Madera",
+									"Metal",
+									"Piedra"
+								]}
+							]
+    					}"
+  		}
+  	}
+]
