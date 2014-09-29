@@ -1,0 +1,150 @@
+[
+	{
+    "model": "colecciones.Coleccion",
+    "pk": 1,
+    "fields": 
+    	{
+      		"nombre": "Colección Prehispánica"
+    	}
+  	},
+  	{
+    	"model": "colecciones.Coleccion",
+    	"pk": 2,
+    	"fields": 
+    	{
+      		"nombre": "Colección Histórica"
+    	}
+  	},
+  	{
+    	"model": "colecciones.Coleccion",
+    	"pk": 3,
+    	"fields": 
+    	{
+      		"nombre": "Colección Archivo Histórico"
+    	}
+  	},
+  	{
+    	"model": "colecciones.Coleccion",
+    	"pk": 4,
+    	"fields": 
+    	{
+      		"nombre": "Colección Fototeca"
+    	}
+  	},
+  	{
+    	"model": "colecciones.Coleccion",
+    	"pk": 5,
+    	"fields": 
+    	{
+      		"nombre": "Colección Zoológica"
+    	}
+  	},
+  	{
+    	"model": "colecciones.Categoria",
+    	"pk": 1,
+    	"fields": 
+    	{
+      		"nombre": "Cerámica"
+    	}
+  	},
+  	{
+    "model": "colecciones.Categoria",
+    "pk": 2,
+    "fields": {
+      "nombre": "Lítica"
+    	}
+  	},
+  	{
+    "model": "colecciones.Categoria",
+    "pk": 3,
+    "fields": {
+      "nombre": "Restos óseos"
+    	}
+  	},
+  	{
+    "model": "colecciones.Categoria",
+    "pk": 4,
+    "fields": {
+      "nombre": "Metalurgia"
+    	}
+  	},
+  	{
+    "model": "colecciones.Categoria",
+    "pk": 5,
+    "fields": {
+      "nombre": "Textil"
+    	}
+  	},
+  	{
+    "model": "colecciones.Categoria",
+    "pk": 6,
+    "fields": {
+      "nombre": "Ebanistería"
+    	}
+  	},
+  	{
+    "model": "colecciones.Categoria",
+    "pk": 7,
+    "fields": {
+      "nombre": "Varios"
+    	}
+  	},
+  	{
+    "model": "colecciones.Categoria",
+    "pk": 8,
+    "fields": {
+      "nombre": "Numismática"
+    	}
+  	},
+  	{
+    "model": "colecciones.Categoria",
+    "pk": 9,
+    "fields": {
+      "nombre": "Instrumentos Musicales"
+    	}
+  	},
+  	{
+    "model": "colecciones.Categoria",
+    "pk": 10,
+    "fields": {
+      "nombre": "Mamíferos"
+    	}
+  	},
+  	{
+    "model": "colecciones.Categoria",
+    "pk": 11,
+    "fields": {
+      "nombre": "Reptiles"
+    	}
+  	},
+  	{
+    "model": "colecciones.Categoria",
+    "pk": 12,
+    "fields": {
+      "nombre": "Aves"
+    	}
+  	},
+  	{
+    "model": "colecciones.Categoria",
+    "pk": 13,
+    "fields": {
+      "nombre": "Insectos"
+    	}
+  	},
+  	{
+    "model": "colecciones.Categoria",
+    "pk": 14,
+    "fields": 
+    {
+      "nombre": "Moluscos"
+    }
+  	},
+  	
+  	{
+    "model": "colecciones.Categoria",
+    "pk": 15,
+    "fields": {
+      "nombre": "Anfibios"
+    	}
+  	}
+]

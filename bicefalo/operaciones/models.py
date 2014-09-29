@@ -5,7 +5,7 @@ class Mantenimiento(models.Model):
 	procedimiento = models.IntegerField(null=True, blank=True)
 	metodoMaterial = models.TextField(null=True,blank=True)
 	fecha = models.DateField(auto_now=True, blank=True, null=True)
-	consolidacion = models.ForeignKey('operaciones.models.Consolidacion')
+	consolidacion = models.ForeignKey('Consolidacion')
 
 class Consolidacion(models.Model):
 	limpieza= models.BooleanField(default=False)
