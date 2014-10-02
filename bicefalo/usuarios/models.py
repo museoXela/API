@@ -12,6 +12,11 @@ class Perfil(models.Model):
     Branch: master
     Modificado: 18/10/2013 
     """
+    class Meta:
+        db_table='UserDetail'
+        verbose_name='perfil'
+        verbose_name_plural='perfiles'
+          
     usuario = models.OneToOneField(User, related_name='profile')
     pais = models.ForeignKey(Country,  null=True)
     fotografia = models.ImageField(upload_to="users", null=True, blank=True,
@@ -21,3 +26,18 @@ class Perfil(models.Model):
     
     def __unicode__(self):
         return self.usuario.get_username()
+    
+class Publicacion(models.Model):
+    autor = models.ForeignKey(Perfil, related_name='publicaciones')
+    fecha = models.DateField(auto_now=True, blank=True, null=True)
+    nombre = models.CharField(max_length=140)
+    publicacion = models.CharField(max_length=200)
+    link = models.URLField()
+    
+    class Meta:
+        db_table='Publicacion'
+        verbose_name='publicación'
+        verbose_name_plural='publicaciones'  
+          
+    def __unicode__(self):
+        return self.nombre
