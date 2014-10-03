@@ -12,7 +12,7 @@ class Eventos (models.Model):
     usuario =models.ForeignKey(Perfil)
     
     class Meta:
-        dbTable='Eventos'
+        db_table='Eventos'
         verbose_name='evento'
         verbose_name_plural='eventos'
         

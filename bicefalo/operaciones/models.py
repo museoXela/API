@@ -8,7 +8,7 @@ class Mantenimiento(models.Model):
 	consolidacion = models.ForeignKey('Consolidacion')
 	
 	class Meta:
-		dbTable='Mantenimiento'
+		db_table='Mantenimiento'
 		verbose_name='mantenimiento'
 		verbose_name_plural='mantenimientos'
 	def __unicode__(self):
