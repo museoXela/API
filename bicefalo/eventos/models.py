@@ -8,8 +8,8 @@ class Eventos (models.Model):
     descripcion=models.TextField(null=True,blank=True)
     afiche =models.TextField(null=True,blank=True)
     fecha=models.DateField(auto_now=True, blank=True, null=True)
-    sala=models.ForeignKey('Sala')
-    usuario =models.ForeignKey('Perfil')
+    sala=models.ForeignKey(Sala)
+    usuario =models.ForeignKey(Perfil)
     
     class Meta:
         dbTable='Eventos'
