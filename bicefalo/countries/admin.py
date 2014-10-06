@@ -5,6 +5,6 @@ __author__="t4r0"
 __date__ ="$16-oct-2013 18:46:32$"
 
 from django.contrib import admin
-from usuarios.models import Perfil
+from models import Country
 
-admin.site.register(Perfil)
+admin.site.register(Country)

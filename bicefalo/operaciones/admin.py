@@ -3,4 +3,3 @@ from models import Consolidacion, Mantenimiento
 
 admin.site.register([Mantenimiento, Consolidacion])
 
-# Register your models here.
