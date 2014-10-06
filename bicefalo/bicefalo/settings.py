@@ -46,6 +46,8 @@ INSTALLED_APPS = (
     'registro',
     'usuarios',
     'operaciones',
+    'traslados',
+    'eventos',
 )
 
 MIDDLEWARE_CLASSES = (
