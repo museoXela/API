@@ -17,12 +17,12 @@ class Perfil(models.Model):
         verbose_name='perfil'
         verbose_name_plural='perfiles'
           
-    usuario = models.OneToOneField(User, related_name='profile')
+    usuario = models.OneToOneField(User)
+    filiacionAcademica = models.CharField(blank=True, max_length=50)
     pais = models.ForeignKey(Country,  null=True)
     fotografia = models.ImageField(upload_to="users", null=True, blank=True,
-                                default='users/default.png')    
-    followers = models.ManyToManyField(User, related_name='followers', null=True, blank=True)
-    followings = models.ManyToManyField(User, related_name='followings', null=True, blank=True)
+                                default='users/default.png')
+    biografia = models.TextField(blank = True)
     
     def __unicode__(self):
         return self.usuario.get_username()

@@ -1,16 +1,20 @@
 from django.conf.urls import patterns, include, url
 from tastypie.api import Api
 from django.contrib import admin
-from usuarios.resources import UserResource
-from colecciones.resources import Coleccion, Categoria
-from investigacion.resources import Investigacion
-from registro.resources import Ficha
 
-resources = [UserResource(), Coleccion(), Categoria(), Investigacion(), Ficha()]
+# imports for api resources
+from eventos.resources import Eventos
+from investigacion.resources import Investigacion
+from colecciones.resources import Coleccion, Categoria
+from registro.resources import Ficha
+from usuarios.resources import UserResource
+
+resources = [UserResource(), Coleccion(), Categoria(), Investigacion(), Ficha(), Eventos()]
 admin.autodiscover()
 api = Api(api_name='v1')
 for resource in resources:
     api.register(resource)
+    
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'bicefalo.views.home', name='home'),

@@ -5,7 +5,7 @@
     "fields": 
     	{
       		"nombre": "Ficha de ejemplo",
-      		"estructura":"{
+      		"estructura":{
 								"campos": [
 								{"id":1,"tipo":1, "descripcion": "Nombre de la pieza"},
 								{"id":2,"tipo":2, "descripcion": "Observaciones"},
@@ -24,7 +24,7 @@
 									"Piedra"
 								]}
 							]
-    					}"
+    					}
   		}
   	}
 ]

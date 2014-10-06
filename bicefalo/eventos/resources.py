@@ -1,6 +1,7 @@
 from bicefalo.authentication import OAuth20Authentication
 from tastypie.authorization import DjangoAuthorization
 from tastypie.resources import ModelResource
+from models import Eventos
 
 class Eventos(ModelResource):
     class Meta:
