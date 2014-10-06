@@ -1,16 +1,17 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from django.db import models
-
+from jsonfield import fields
 class Ficha(models.Model):
     nombre = models.CharField(unique=True,max_length=50)
-    estructura = models.TextField()
+    estructura = fields.JSONField()
     consolidacion = models.BooleanField(default=False)
     
     class Meta:
         db_table='Ficha'
         verbose_name='ficha de registro'
         verbose_name_plural='fichas de registro'
+    
         
     def __unicode__(self):
         return self.nombre
