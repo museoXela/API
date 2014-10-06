@@ -4,8 +4,9 @@ from django.contrib import admin
 from usuarios.resources import UserResource
 from colecciones.resources import Coleccion, Categoria
 from investigacion.resources import Investigacion
+from registro.resources import Ficha
 
-resources = [UserResource(), Coleccion(), Categoria(), Investigacion()]
+resources = [UserResource(), Coleccion(), Categoria(), Investigacion(), Ficha()]
 admin.autodiscover()
 api = Api(api_name='v1')
 for resource in resources:
