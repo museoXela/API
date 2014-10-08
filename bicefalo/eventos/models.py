@@ -4,9 +4,9 @@ from django.db import models
 class Eventos (models.Model):
     from traslados.models import Sala
     from usuarios.models import Perfil
-    nombre = models.TextField(null=True,blank=True)
+    nombre = models.CharField(null=True,blank=True,max_length=45)
     descripcion=models.TextField(null=True,blank=True)
-    afiche =models.TextField(null=True,blank=True)
+    afiche =models.ImageField(null=True,blank=True)
     fecha=models.DateField(auto_now=True, blank=True, null=True)
     sala=models.ForeignKey(Sala)
     usuario =models.ForeignKey(Perfil)

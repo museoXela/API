@@ -19,7 +19,7 @@ class Traslado (models.Model):
 			return self.fecha 
 	
 class Caja(models.Model):
-	codigo= models.TextField(null=True,blank=True)
+	codigo= models.CharField(null=True,blank=True,max_length=50)
 	class Meta:
 		db_table='Caja'
 		verbose_name='caja'
@@ -28,9 +28,9 @@ class Caja(models.Model):
 			return self.codigo 
 	
 class Sala(models.Model):
-	nombre=models.TextField(null=True,blank=True)
-	descripcion=models.TextField(null=True,blank=True)
-	fotografia=models.TextField(null=True,blank=True)
+	nombre=models.CharField(null=True,blank=True,max_length=50)
+	descripcion=models.CharField(null=True,blank=True,max_length=50)
+	fotografia=models.CharField(null=True,blank=True,max_length=50)
 	class Meta:
 		db_table='Sala'
 		verbose_name='sala'
