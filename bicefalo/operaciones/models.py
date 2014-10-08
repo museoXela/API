@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 class Mantenimiento(models.Model):
 	procedimiento = models.IntegerField(null=True, blank=True)
-	metodoMaterial = models.TextField(null=True,blank=True)
+	metodoMaterial = models.CharField(null=True,blank=True,max_length=200)
 	fecha = models.DateField(auto_now=True, blank=True, null=True)
 	consolidacion = models.ForeignKey('Consolidacion')
 	
