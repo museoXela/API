@@ -29,8 +29,7 @@ class UserResource(ModelResource):
                 if user.is_active:
                     login(request,user)
                     bundle = self.build_bundle(obj=user, request=request)
-                    bundle = self.full_dehydrate(bundle)
-                    print(request.user)
+                    bundle = self.full_dehydrate(bundle)                    
                     return self.create_response(request,bundle)
                 else:
                     return self.create_response(request,{'error':'tu cuenta está deshabilitada'},response_class=HttpForbidden)

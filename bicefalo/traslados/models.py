@@ -6,7 +6,7 @@ class Traslado (models.Model):
 	from usuarios.models import Perfil
 	from piezas.models import Pieza
 	fecha= models.DateField(auto_now=True,blank=True,null=True)
-	bodega=models.BooleanField(null=True,blank=True)
+	bodega=models.BooleanField(default=True,blank=True)
 	caja= models.ForeignKey('Caja')
 	vitrina=models.ForeignKey('Vitrina')
 	responsable=models.ForeignKey(Perfil) 
