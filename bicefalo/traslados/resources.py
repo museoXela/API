@@ -1,7 +1,7 @@
 from bicefalo.authentication import OAuth20Authentication
 from tastypie.authorization import DjangoAuthorization
 from tastypie.resources import ModelResource
-
+from models import *
 class Traslado(ModelResource):
     class Meta:
         queryset= Traslado.objects.all()
@@ -27,8 +27,9 @@ class Caja(ModelResource):
 class Sala(ModelResource):
     class Meta:
         queryset= Sala.objects.all()
-        resource_name= 'sala'
+        resource_name= 'salas'
         allowed_methods=['get','post','put']
+        fields=['nombre', 'descripcion','fotografia']
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
         

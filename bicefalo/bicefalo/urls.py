@@ -8,8 +8,9 @@ from investigacion.resources import Investigacion
 from colecciones.resources import Coleccion, Categoria
 from registro.resources import Ficha
 from usuarios.resources import UserResource
+from traslados.resources import Sala
 
-resources = [UserResource(), Coleccion(), Categoria(), Investigacion(), Ficha(), Eventos()]
+resources = [UserResource(), Coleccion(), Categoria(), Investigacion(), Ficha(), Eventos(), Sala()]
 admin.autodiscover()
 api = Api(api_name='v1')
 for resource in resources:
