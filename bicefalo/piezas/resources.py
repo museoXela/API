@@ -1,53 +1,28 @@
-from bicefalo.authentication import OAuth20Authentication
-from tastypie.authorization import DjangoAuthorization
-from tastypie.resources import ModelResource
-from models import Pieza
-from models import Autor
-from models import Fotografia
-from models import Clasificacion
+from __future__ import unicode_literals
+from bicefalo.utils import CustomResource
+from models import Pieza, Autor, Fotografia, Clasificacion
+
 
 # Create your views here.
 
-class Pieza (ModelResource):
+class Pieza (CustomResource):
     class Meta:
         queryset = Pieza.objects.all()
         resource_name='piezas'
-        allowed_methods = ['get','put','post']
-        authorization = DjangoAuthorization()
-        authentication = OAuth20Authentication()
-        
-    def alter_list_data_to_serialize(self, request, data):
-        return data["objects"]
 
-class Autor (ModelResource):
+class Autor (CustomResource):
     class Meta:
         queryset = Autor.objects.all()
-        resource_name='autor'
-        allowed_methods = ['get','put','post']
-        authorization = DjangoAuthorization()
-        authentication = OAuth20Authentication()
-        
-    def alter_list_data_to_serialize(self, request, data):
-        return data["objects"]
+        resource_name='autores'
     
-class Fotografia (ModelResource):
+class Fotografia (CustomResource):
     class Meta:
         queryset = Fotografia.objects.all()
-        resource_name='fotografia'
-        allowed_methods = ['get','put','post']
-        authorization = DjangoAuthorization()
-        authentication = OAuth20Authentication()
+        resource_name='fotografias'
         
-    def alter_list_data_to_serialize(self, request, data):
-        return data["objects"]
-    
-class Clasificacion (ModelResource):
+class Clasificacion (CustomResource):
     class Meta:
         queryset = Clasificacion.objects.all()
         resource_name='clasificacion'
-        allowed_methods = ['get','put','post']
-        authorization = DjangoAuthorization()
-        authentication = OAuth20Authentication()
         
-    def alter_list_data_to_serialize(self, request, data):
-        return data["objects"]
+enabled_resources=[Pieza,Autor, Fotografia, Clasificacion]

@@ -40,10 +40,10 @@ class Pieza(models.Model):
     maestra = models.BooleanField(default=False, blank=True)
     exhibicion = models.BooleanField(default=False, blank =True)
     altura = models.FloatField(blank=True, null=True)
-    ancho = models.FloatField(blank=True)
-    grosor = models.FloatField(blank=True)
-    largo = models.FloatField(blank=True)
-    diametro = models.FloatField(blank=True)
+    ancho = models.FloatField(blank=True, null=True)
+    grosor = models.FloatField(blank=True, null=True)
+    largo = models.FloatField(blank=True, null=True)
+    diametro = models.FloatField(blank=True, null=True)
     
     class Meta:
         db_table='Pieza'
