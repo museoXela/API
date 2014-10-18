@@ -41,7 +41,7 @@ Scripts
 *.pyc
 *~
 *.db
- 
+bin/
 # MacOSX
 .DS_Store
 # C extensions
