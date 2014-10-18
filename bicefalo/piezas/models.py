@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from countries.models import Country
-
+from django.template.defaultfilters import slugify
 
 class Autor(models.Model):
     pais = models.ForeignKey(Country, related_name='autores')
@@ -20,7 +20,6 @@ class Autor(models.Model):
     
 class Pieza(models.Model):
     from usuarios.models import Perfil
-    prepopulated_fields = {'slug':('codigoSlug',)}
     #Definicion de campos
     codigo = models.CharField(primary_key=True, max_length=20)
     codigoSlug = models.SlugField(blank=True)
@@ -49,7 +48,12 @@ class Pieza(models.Model):
         db_table='Pieza'
         verbose_name='pieza'
         verbose_name_plural='piezas'
-    
+        
+    def save(self):
+        super(Pieza, self).save()
+        self.codigoSlug = slugify(self.codigo)
+        super(Pieza, self).save()
+        
     def __unicode__(self):
         return self.codigo
 
