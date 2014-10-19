@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
+from bicefalo.authentication import OAuth20Authentication
 from bicefalo.utils import CustomResource
+from tastypie.authorization import DjangoAuthorization
 from tastypie.resources import ObjectDoesNotExist, MultipleObjectsReturned
 from tastypie.http import HttpGone, HttpMultipleChoices
 from django.conf.urls import url
@@ -11,12 +13,16 @@ class LinkResource(CustomResource):
         resource_name = 'linksInvestigacion'
         fields = ['link']
         include_resource_uri = False
+        
 
 class Investigacion(CustomResource):
     class Meta:
         queryset= Investigacion.objects.all()
         resource_name='investigaciones'
         fields = ['titulo', 'contenido', 'resumen', 'autor', 'fecha', 'editor']
+        allowed_methods=['get','post','put']
+        authorization = DjangoAuthorization()
+        authentication = OAuth20Authentication()
         
     def get_links(self, request, **kwargs):
         try:

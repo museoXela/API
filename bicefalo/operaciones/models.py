@@ -28,5 +28,6 @@ class Consolidacion(models.Model):
 		db_table='Consolidacion'
 		verbose_name='consolidacion'
 		verbose_name_plural='consolidaciones'
+		
 	def __unicode__(self):
 		return self.limpieza 

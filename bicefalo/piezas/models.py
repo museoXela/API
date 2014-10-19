@@ -17,7 +17,6 @@ class Autor(models.Model):
     def __unicode__(self):
         return self.nombre + ' ' + self.apellido
     
-    
 class Pieza(models.Model):
     from usuarios.models import Perfil
     #Definicion de campos
@@ -53,14 +52,22 @@ class Pieza(models.Model):
         super(Pieza, self).save()
         self.codigoSlug = slugify(self.codigo)
         super(Pieza, self).save()
-        
+    
+    def get_profile_image(self):
+        try:
+            foto = Fotografia.objects.filter(pieza = self).all()
+            return foto.get(perfil=True).ruta
+        except:
+            return ""
+    def get_categoria(self):
+        return unicode(self.clasificacion.categoria)
     def __unicode__(self):
         return self.codigo
 
 class Fotografia(models.Model):
     from operaciones.models import Mantenimiento
-    mantenimiento = models.ForeignKey(Mantenimiento, blank=True, related_name='mantenimiento')
-    pieza = models.ForeignKey(Pieza, blank=True, null=True)
+    mantenimiento = models.ForeignKey(Mantenimiento, blank=True, null=True, related_name='fotografias')
+    pieza = models.ForeignKey('Pieza', blank=True, null=True)
     tipo = models.SmallIntegerField(blank=True)
     ruta = models.ImageField(upload_to='piezas')
     perfil = models.BooleanField(default=True)
@@ -69,7 +76,7 @@ class Fotografia(models.Model):
         db_table='Fotografia'
         verbose_name='fotografía'
         verbose_name_plural='fotografías'
-        
+    
 class Clasificacion(models.Model):
     from registro.models import Ficha
     from colecciones.models import Coleccion, Categoria
