@@ -1,17 +1,13 @@
 from __future__ import unicode_literals
-from bicefalo.authentication import OAuth20Authentication
 from tastypie.paginator import Paginator
-from tastypie.authorization import DjangoAuthorization
 from tastypie.resources import ModelResource
 from tastypie.api import Api
     
     
 class CustomResource(ModelResource):
     class Meta:
-        allowed_methods=['get','post','put']
-        authorization = DjangoAuthorization()
-        authentication = OAuth20Authentication()
         paginator = Paginator
+        
     def alter_list_data_to_serialize(self, request, data):
         return data["objects"] 
  

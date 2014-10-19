@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
+from bicefalo.authentication import OAuth20Authentication
 from bicefalo.utils import CustomResource
+from tastypie.authorization import DjangoAuthorization
 from django.contrib.auth.models import User
-from tastypie.http import *
 
 class UserResource(CustomResource):    
     class Meta:
@@ -12,6 +13,9 @@ class UserResource(CustomResource):
         resource_name = 'usuarios'
         fields = ['username','date_joined','first_name','last_name','is_staff']       
         detail_uri_name = 'username'
+        allowed_methods=['get','post','put']
+        authorization = DjangoAuthorization()
+        authentication = OAuth20Authentication()
     
     def login(self, request, **kwargs):
         from django.contrib.auth import authenticate, login      
