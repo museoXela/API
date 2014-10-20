@@ -11,7 +11,7 @@ def register_resources(resources=None):
             
 autodiscover('resources','enabled_resources', register_resources)
 urlpatterns = patterns('',
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^oAuth/', include('provider.oauth2.urls', namespace='oauth2')),
+    url(r'/admin/', include(admin.site.urls)),
+    url(r'/oAuth/', include('provider.oauth2.urls', namespace='oauth2')),
     url(r'^api/', include(api.urls)),
 )
