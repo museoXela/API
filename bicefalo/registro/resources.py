@@ -12,6 +12,7 @@ class Ficha(CustomResource):
         resource_name='fichas'
         fields=['nombre','consolidacion']
         allowed_methods=['get','post','put']
+        always_return_data = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
 

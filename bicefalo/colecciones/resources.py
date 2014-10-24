@@ -10,6 +10,7 @@ class Categoria(CustomResource):
         resource_name='categorias'
         fields = ['nombre']
         allowed_methods=['get','post','put']
+        always_return_data = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
 
@@ -19,6 +20,7 @@ class Coleccion(CustomResource):
         resource_name='colecciones'
         fields = ['nombre']
         allowed_methods=['get','post','put']
+        always_return_data = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
 

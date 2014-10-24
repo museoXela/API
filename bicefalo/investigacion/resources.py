@@ -4,6 +4,8 @@ from bicefalo.utils import CustomResource
 from tastypie.authorization import DjangoAuthorization
 from tastypie.resources import ObjectDoesNotExist, MultipleObjectsReturned
 from tastypie.http import HttpGone, HttpMultipleChoices
+from tastypie import fields
+from tastypie.resources import ALL
 from django.conf.urls import url
 from models import Investigacion, LinkInvestigacion
 
@@ -16,13 +18,19 @@ class LinkResource(CustomResource):
         
 
 class Investigacion(CustomResource):
+
+    userFoto= fields.CharField(null=True, readonly=True)
     class Meta:
         queryset= Investigacion.objects.all()
         resource_name='investigaciones'
-        fields = ['titulo', 'contenido', 'resumen', 'autor', 'fecha', 'editor']
+        fields = ['id','titulo', 'contenido', 'resumen', 'fecha', 'editor']
         allowed_methods=['get','post','put']
+        always_return_data = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
+        filtering={
+                   'editor': ALL
+                   }
         
     def get_links(self, request, **kwargs):
         try:
@@ -42,6 +50,9 @@ class Investigacion(CustomResource):
 
         res.log_throttled_access(request)
         return res.create_response(request, objects)
+    
+    def dehydrate_userFoto(self, bundle):
+        return unicode(bundle.obj.editor.fotografia)
     
     def get_piezas(self, request, **kwargs):
         from piezas.resources import Pieza
@@ -65,8 +76,8 @@ class Investigacion(CustomResource):
      
     def prepend_urls(self):
         return [
-        url(r'^investigaciones/(?P<pk>\d+)/links/$', self.wrap_view('get_links'),name='investigacion_links'),
-        url(r'^investigaciones/(?P<pk>\d+)/piezas/$', self.wrap_view('get_piezas'),name='investigacion_links'),]
+        url(r'^investigaciones/(?P<pk>\d+)/links/$', self.wrap_view('get_links'),name='investigacion_links'),]
 
 
 enabled_resources=[Investigacion]
+web_resources=[Investigacion]

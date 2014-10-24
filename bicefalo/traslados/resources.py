@@ -23,7 +23,7 @@ class Sala(CustomResource):
     class Meta:
         queryset= Sala.objects.all()
         resource_name= 'salas'
-        fields=['nombre', 'descripcion','fotografia']
+        fields=['nombre', 'descripcion','fotografia']      
         allowed_methods=['get','post','put']
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
@@ -32,7 +32,7 @@ class Vitrina(CustomResource):
     class Meta:
         queryset= Vitrina.objects.all()
         resource_name= 'vitrina'
-        allowed_methods=['get','post','put']
+        allowed_methods=['get','post','put']       
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
         

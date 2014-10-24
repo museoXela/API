@@ -6,16 +6,20 @@ from tastypie import fields
 from models import Eventos
 import datetime
 
-class Eventos(CustomResource):
+class EventosResource(CustomResource):
     sala = fields.CharField(attribute='sala')
+    fotoSala = fields.CharField(null=True)
     usuario = fields.CharField(attribute='usuario')
     class Meta:
-        queryset=  Eventos.objects.filter(fecha__gte=datetime.date.today()).order_by('-fecha')
+        queryset=  Eventos.objects.all()
         resource_name= 'eventos'
         excludes=['id']
         allowed_methods=['get','post','put']
+        always_return_data = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
+    def dehydrate_fotoSala(self, bundle):
+        return unicode(bundle.obj.sala.fotografia)
         
     def hydrate_sala(self, bundle):
         from traslados.models import Sala
@@ -32,5 +36,16 @@ class Eventos(CustomResource):
             usuario = User.objects.get(username=usuario).perfil
             bundle.data['usuario'] = usuario
         return bundle
+    
+class EventosRecientes(EventosResource):
+    class Meta:
+        queryset=  Eventos.objects.filter(fecha__gte=datetime.date.today()).order_by('-fecha')
+        resource_name= 'eventos'
+        excludes=['id']
+        allowed_methods=['get']
+        always_return_data = False
+        authorization = DjangoAuthorization()
+        authentication = OAuth20Authentication()
         
-enabled_resources=[Eventos]
+enabled_resources=[EventosResource]
+web_resources=[EventosRecientes]
