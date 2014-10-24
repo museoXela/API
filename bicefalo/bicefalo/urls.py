@@ -20,6 +20,6 @@ autodiscover('resources','web_resources', register_web_resources)
 urlpatterns = patterns('',
     url(r'/admin/', include(admin.site.urls)),
     url(r'/oAuth/', include('provider.oauth2.urls', namespace='oauth2')),
-    url(r'^web/', include(web_api.urls)),
-    url(r'^api/', include(api.urls)),
+    url(r'/web/', include(web_api.urls)),
+    url(r'/api/', include(api.urls)),
 )
