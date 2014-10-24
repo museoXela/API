@@ -21,5 +21,5 @@ urlpatterns = patterns('',
     url(r'/admin/', include(admin.site.urls)),
     url(r'/oAuth/', include('provider.oauth2.urls', namespace='oauth2')),
     url(r'^api/', include(api.urls)),
-    url(r'^', include(web_api.urls)),
+    url(r'^web/', include(web_api.urls)),
 )
