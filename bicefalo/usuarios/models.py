@@ -23,7 +23,7 @@ class Perfil(models.Model):
     fotografia = models.ImageField(upload_to="users", null=True, blank=True,
                                 default='users/default.png')
     biografia = models.TextField(blank = True)
-    #voluntario = models.BooleanField(default=True)
+    voluntario = models.BooleanField(default=True)
     def __unicode__(self):
         return self.usuario.get_username()
     
