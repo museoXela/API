@@ -11,6 +11,7 @@ class Traslado (models.Model):
 	vitrina=models.ForeignKey('Vitrina')
 	responsable=models.ForeignKey(Perfil) 
 	codigoPieza=models.ForeignKey(Pieza) 
+	
 	class Meta:
 		db_table='Traslado'
 		verbose_name='traslado'

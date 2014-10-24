@@ -4,7 +4,8 @@ from django.contrib import admin
 from bicefalo.utils import autodiscover
 admin.autodiscover()
 api = Api(api_name='v1')
-web_api = Api(api_name='web')
+web_api = Api(api_name='v1')
+
 def register_resources(resources=None):
     if not resources is None:
         for resource in resources:

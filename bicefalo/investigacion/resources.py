@@ -20,10 +20,11 @@ class LinkResource(CustomResource):
 class Investigacion(CustomResource):
 
     userFoto= fields.CharField(null=True, readonly=True)
+    editor=fields.CharField(attribute='editor')
     class Meta:
         queryset= Investigacion.objects.all()
         resource_name='investigaciones'
-        fields = ['id','titulo', 'contenido', 'resumen', 'fecha', 'editor']
+        fields = ['id','titulo', 'contenido', 'resumen', 'fecha']
         allowed_methods=['get','post','put']
         always_return_data = False
         authorization = DjangoAuthorization()
@@ -53,6 +54,15 @@ class Investigacion(CustomResource):
     
     def dehydrate_userFoto(self, bundle):
         return unicode(bundle.obj.editor.fotografia)
+    
+    def hydrate_editor(self, bundle):
+        from django.contrib.auth.models import User
+        from usuarios.models import Perfil
+        usuario = bundle.data['editor']
+        if usuario:
+            usuario = User.objects.get(username=usuario).perfil
+            bundle.data['editor'] = usuario
+        return bundle
     
     def get_piezas(self, request, **kwargs):
         from piezas.resources import Pieza

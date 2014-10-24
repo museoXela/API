@@ -18,6 +18,7 @@ class EventosResource(CustomResource):
         always_return_data = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
+        
     def dehydrate_fotoSala(self, bundle):
         return unicode(bundle.obj.sala.fotografia)
         
@@ -36,7 +37,7 @@ class EventosResource(CustomResource):
             usuario = User.objects.get(username=usuario).perfil
             bundle.data['usuario'] = usuario
         return bundle
-    
+            
 class EventosRecientes(EventosResource):
     class Meta:
         queryset=  Eventos.objects.filter(fecha__gte=datetime.date.today()).order_by('-fecha')

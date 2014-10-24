@@ -10,7 +10,7 @@ class CustomResource(ModelResource):
         
     def alter_list_data_to_serialize(self, request, data):
         return data['objects']
- 
+    
 from functools import wraps
 import traceback
 import sys

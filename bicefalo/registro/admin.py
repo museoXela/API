@@ -7,8 +7,10 @@ class FichaForm(forms.ModelForm):
     class Meta:
         model=Ficha
         widgets = {'estructura':JSONWidget(),}
+        fields = ['nombre','estructura', 'consolidacion']
         
 class FichaAdmin(admin.ModelAdmin):
     form = FichaForm
+
 admin.site.register(Ficha, FichaAdmin)
 admin.site.register([Campo, Registro, ValorCheck])

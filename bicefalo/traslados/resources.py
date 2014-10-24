@@ -2,14 +2,25 @@ from __future__ import unicode_literals
 from bicefalo.authentication import OAuth20Authentication
 from bicefalo.utils import CustomResource
 from tastypie.authorization import DjangoAuthorization
+from tastypie import fields
 from models import Traslado, Caja, Sala, Vitrina
 class Traslado(CustomResource):
+    responsable = fields.CharField(attribute='responsable')
     class Meta:
         queryset= Traslado.objects.all()
         resource_name= 'traslados'
         allowed_methods=['get','post','put']
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
+        
+    def hydrate_responsable(self, bundle):
+        from django.contrib.auth.models import User
+        from usuarios.models import Perfil
+        usuario = bundle.data['responsable']
+        if usuario:
+            usuario = User.objects.get(username=usuario).perfil
+            bundle.data['responsable'] = usuario
+        return bundle
     
 class Caja(CustomResource):
     class Meta:
