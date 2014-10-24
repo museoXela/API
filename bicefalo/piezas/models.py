@@ -19,7 +19,7 @@ class Autor(models.Model):
     
 class Pieza(models.Model):
     from usuarios.models import Perfil
-    #Definicion de campos
+
     codigo = models.CharField(primary_key=True, max_length=20)
     codigoSlug = models.SlugField(blank=True)
     clasificacion = models.ForeignKey('Clasificacion', related_name='piezas')
@@ -42,6 +42,8 @@ class Pieza(models.Model):
     grosor = models.FloatField(blank=True, null=True)
     largo = models.FloatField(blank=True, null=True)
     diametro = models.FloatField(blank=True, null=True)
+    fechamiento = models.CharField(blank=True, null=True, max_length=100)
+    resumen = models.CharField(blank=True, null=True, max_length=140)
     
     class Meta:
         db_table='Pieza'
@@ -61,6 +63,12 @@ class Pieza(models.Model):
             return ""
     def get_categoria(self):
         return unicode(self.clasificacion.categoria)
+    
+    def get_coleccion(self):
+        return unicode(self.clasificacion.coleccion)
+    
+    def get_clasificacion(self):
+        return unicode(self.clasificacion)
     def __unicode__(self):
         return self.codigo
 

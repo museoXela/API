@@ -9,7 +9,7 @@ class CustomResource(ModelResource):
         paginator = Paginator
         
     def alter_list_data_to_serialize(self, request, data):
-        return data["objects"] 
+        return data['objects']
  
 from functools import wraps
 import traceback

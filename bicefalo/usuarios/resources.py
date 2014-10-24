@@ -5,8 +5,18 @@ from __future__ import unicode_literals
 from bicefalo.authentication import OAuth20Authentication
 from bicefalo.utils import CustomResource
 from tastypie.authorization import DjangoAuthorization
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,Group
+from models import Perfil
+from tastypie import fields
 
+class Groups(CustomResource):
+    class Meta:
+        queryset = Group.objects.all()
+        resource_name='grupos'
+        allowed_methods=['get']
+        authorization = DjangoAuthorization()
+        authentication = OAuth20Authentication()
+    
 class UserResource(CustomResource):    
     class Meta:
         queryset = User.objects.all()
@@ -14,9 +24,10 @@ class UserResource(CustomResource):
         fields = ['username','date_joined','first_name','last_name','is_staff']       
         detail_uri_name = 'username'
         allowed_methods=['get','post','put']
+        always_return_data = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
-    
+        
     def login(self, request, **kwargs):
         from django.contrib.auth import authenticate, login      
         if request.method=='POST':
@@ -51,5 +62,37 @@ class UserResource(CustomResource):
             url(r'^login/$', self.wrap_view('login'), name='login'),
             url(r'^logout/$', self.wrap_view('logout'), name='logout'),
             ]
+class Voluntario(CustomResource):
+    username=fields.CharField(readonly=True, attribute='usuario')
+    nombre=fields.CharField(null=True)
+    apellido=fields.CharField(null=True)
+    
+    class Meta:
+        queryset = Perfil.objects.filter(voluntario=True)
+        resource_name='voluntarios'
+        allowed_methods=['get']
+        fields=['id','biografia', 'fotografia']
+        authorization = DjangoAuthorization()
+        authentication = OAuth20Authentication()
+    
+    def dehydrate_nombre(self, bundle):
+        return unicode(bundle.obj.usuario.first_name)
+    
+    def dehydrate_apellido(self, bundle):
+        return unicode(bundle.obj.usuario.last_name)    
+    
+    def alter_detail_data_to_serialize(self, request, bundle):
+        bundle.data['investigaciones'] = self.get_investigaciones(bundle.obj)
+        return bundle
         
-enabled_resources=[UserResource]
+    def get_investigaciones(self, obj):
+        from investigacion.resources import Investigacion
+        from tastypie.utils import trailing_slash
+        list = obj.investigaciones.order_by('-fecha')[:3]
+        objects = []
+        for investigacion in list:
+            objects.append('/%s/investigaciones/%s%s' %(self.api_name, investigacion.pk, trailing_slash()))
+        return objects
+    
+enabled_resources=[UserResource, Groups]
+web_resources=[Voluntario]

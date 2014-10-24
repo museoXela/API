@@ -9,6 +9,7 @@ class Pais(CustomResource):
         queryset= Country.objects.all()
         resource_name='paises'
         allowed_methods=['get','post','put']
+        always_return_data = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
 enabled_resources=[Pais]
