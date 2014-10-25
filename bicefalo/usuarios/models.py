@@ -20,8 +20,7 @@ class Perfil(models.Model):
     usuario = models.OneToOneField(User, related_name='perfil')
     filiacionAcademica = models.CharField(blank=True, max_length=50)
     pais = models.ForeignKey(Country,  null=True)
-    fotografia = models.ImageField(upload_to="users", null=True, blank=True,
-                                default='users/default.png')
+    fotografia = models.URLField(null=True, blank=True)
     biografia = models.TextField(blank = True)
     voluntario = models.BooleanField(default=True)
     def __unicode__(self):

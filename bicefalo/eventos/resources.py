@@ -13,7 +13,6 @@ class EventosResource(CustomResource):
     class Meta:
         queryset=  Eventos.objects.all()
         resource_name= 'eventos'
-        excludes=['id']
         allowed_methods=['get','post','put']
         always_return_data = False
         authorization = DjangoAuthorization()
@@ -38,7 +37,10 @@ class EventosResource(CustomResource):
             bundle.data['usuario'] = usuario
         return bundle
             
-class EventosRecientes(EventosResource):
+class EventosRecientes(CustomResource):
+    sala = fields.CharField(attribute='sala')
+    fotoSala = fields.CharField(null=True)
+    usuario = fields.CharField(attribute='usuario')
     class Meta:
         queryset=  Eventos.objects.filter(fecha__gte=datetime.date.today()).order_by('-fecha')
         resource_name= 'eventos'

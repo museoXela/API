@@ -17,7 +17,8 @@ class Groups(CustomResource):
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
     
-class UserResource(CustomResource):    
+class UserResource(CustomResource):
+    fotografia = fields.CharField(null = True)
     class Meta:
         queryset = User.objects.all()
         resource_name = 'usuarios'
@@ -27,6 +28,11 @@ class UserResource(CustomResource):
         always_return_data = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
+    
+    def hydrate_fotografia(self, bundle):
+        bundle.obj.perfil.fotografia = bundle.data['fotografia']
+        bundle.obj.perfil.save()
+        return bundle
         
     def login(self, request, **kwargs):
         from django.contrib.auth import authenticate, login      
@@ -66,7 +72,7 @@ class Voluntario(CustomResource):
     username=fields.CharField(readonly=True, attribute='usuario')
     nombre=fields.CharField(null=True)
     apellido=fields.CharField(null=True)
-    
+    investigaciones = fields.ListField(null=True)
     class Meta:
         queryset = Perfil.objects.filter(voluntario=True)
         resource_name='voluntarios'
@@ -81,9 +87,8 @@ class Voluntario(CustomResource):
     def dehydrate_apellido(self, bundle):
         return unicode(bundle.obj.usuario.last_name)    
     
-    def alter_detail_data_to_serialize(self, request, bundle):
-        bundle.data['investigaciones'] = self.get_investigaciones(bundle.obj)
-        return bundle
+    def dehydrate_investigaciones(self, request, bundle):
+        return self.get_investigaciones(bundle.obj)
         
     def get_investigaciones(self, obj):
         from investigacion.resources import Investigacion

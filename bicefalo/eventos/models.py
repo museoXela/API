@@ -10,7 +10,7 @@ class Eventos (models.Model):
     fecha=models.DateField(blank=True, null=True)
     sala=models.ForeignKey(Sala)
     usuario =models.ForeignKey(Perfil)
-    
+    hora = models.TimeField(null=True)
     class Meta:
         db_table='Eventos'
         verbose_name='evento'

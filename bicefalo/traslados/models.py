@@ -7,10 +7,10 @@ class Traslado (models.Model):
 	from piezas.models import Pieza
 	fecha= models.DateField(auto_now=True,blank=True,null=True)
 	bodega=models.BooleanField(default=True,blank=True)
-	caja= models.ForeignKey('Caja')
-	vitrina=models.ForeignKey('Vitrina')
+	caja= models.ForeignKey('Caja', blank=True, null=True)
+	vitrina=models.ForeignKey('Vitrina', blank=True, null=True)
 	responsable=models.ForeignKey(Perfil) 
-	codigoPieza=models.ForeignKey(Pieza) 
+	pieza=models.ForeignKey(Pieza) 
 	
 	class Meta:
 		db_table='Traslado'
@@ -20,7 +20,7 @@ class Traslado (models.Model):
 			return self.fecha 
 	
 class Caja(models.Model):
-	codigo= models.CharField(null=True,blank=True,max_length=50)
+	codigo= models.CharField(unique=True, null=True,blank=True,max_length=50)
 	class Meta:
 		db_table='Caja'
 		verbose_name='caja'
@@ -29,7 +29,7 @@ class Caja(models.Model):
 			return self.codigo 
 	
 class Sala(models.Model):
-	nombre=models.CharField(null=True,blank=True,max_length=50)
+	nombre=models.CharField(unique=True,null=True,blank=True,max_length=50)
 	descripcion=models.TextField(null=True,blank=True,max_length=50)
 	fotografia=models.ImageField(upload_to='salas',null=True,blank=True, default='salas/room.jpg')
 	class Meta:

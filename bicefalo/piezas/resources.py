@@ -67,7 +67,7 @@ class Exhibicion(Pieza):
         queryset = Piezas.objects.filter(exhibicion=True)
         resource_name = 'exhibicion'
         allowed_methods=['get']
-        fields=['nombre','fechamiento', 'resumen']
+        fields=['codigo','nombre','fechamiento', 'resumen']
         always_return_data = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
