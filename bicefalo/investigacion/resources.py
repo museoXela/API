@@ -18,7 +18,7 @@ class LinkResource(CustomResource):
         
 
 class Investigacion(CustomResource):
-
+    links = fields.ListField(null = True)
     userFoto= fields.CharField(null=True, readonly=True)
     editor=fields.CharField(attribute='editor')
     class Meta:
@@ -33,14 +33,7 @@ class Investigacion(CustomResource):
                    'editor': ALL
                    }
         
-    def get_links(self, request, **kwargs):
-        try:
-            bundle = self.build_bundle(data={'pk':kwargs['pk']}, request=request)
-            obj = self.cached_obj_get(bundle=bundle, **self.remove_api_resource_names(kwargs))
-        except ObjectDoesNotExist:
-            return HttpGone()
-        except MultipleObjectsReturned:
-            return HttpMultipleChoices("More than one resource is found at this uri")
+    def get_links(self, request, obj):        
         res= LinkResource()
         list = obj.links.all()
         objects = []
@@ -54,6 +47,9 @@ class Investigacion(CustomResource):
     
     def dehydrate_userFoto(self, bundle):
         return unicode(bundle.obj.editor.fotografia)
+    
+    def dehydrate_links(self, bundle):
+        return self.get_links(bundle.request, bundle.obj)
     
     def hydrate_editor(self, bundle):
         from django.contrib.auth.models import User
@@ -83,10 +79,6 @@ class Investigacion(CustomResource):
 
         res.log_throttled_access(request)
         return res.create_response(request, objects)
-     
-    def prepend_urls(self):
-        return [
-        url(r'^investigaciones/(?P<pk>\d+)/links/$', self.wrap_view('get_links'),name='investigacion_links'),]
 
 class CustomInvestigacion(CustomResource):
     class Meta:
