@@ -2,17 +2,13 @@ from __future__ import unicode_literals
 from bicefalo.authentication import OAuth20Authentication
 from bicefalo.utils import CustomResource
 from tastypie.authorization import DjangoAuthorization
-from tastypie import fields
-from models import Ficha
+from models import Country
 
-class Ficha(CustomResource):
-    estructura = fields.DictField(attribute='estructura')
+class Pais(CustomResource):
     class Meta:
-        queryset = Ficha.objects.all()
-        resource_name='fichas'
-        fields=['nombre','consolidacion']
+        queryset= Country.objects.all()
+        resource_name='paises'
         allowed_methods=['get','post','put']
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
-
-enabled_resources=[Ficha]
+enabled_resources=[Pais]

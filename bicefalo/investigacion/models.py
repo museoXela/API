@@ -20,12 +20,11 @@ class Investigacion(models.Model):
         verbose_name_plural= 'Investigaciones'
         
     def __unicode__(self):
-        return unicode(self.editor) + '-' + unicode(self.titulo)
+        return unicode(self.editor) + '-' + unicode(self.titulo)   
 
-class LinkInvestigacion(models.Model):
+class LinkInvestigacion(models.Model):    
     investigacion = models.ForeignKey(Investigacion, related_name='links')
     link = models.URLField()
-    
     class Meta:
         db_table = 'LinkInvestigacion'
         verbose_name = 'link de investigación'
@@ -33,3 +32,5 @@ class LinkInvestigacion(models.Model):
         
     def __unicode__(self):
         return unicode(self.link)
+    
+    

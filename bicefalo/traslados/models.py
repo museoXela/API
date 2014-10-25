@@ -29,14 +29,14 @@ class Caja(models.Model):
 	
 class Sala(models.Model):
 	nombre=models.CharField(null=True,blank=True,max_length=50)
-	descripcion=models.CharField(null=True,blank=True,max_length=50)
-	fotografia=models.CharField(null=True,blank=True,max_length=50)
+	descripcion=models.TextField(null=True,blank=True,max_length=50)
+	fotografia=models.ImageField(upload_to='salas',null=True,blank=True, default='salas/room.jpg')
 	class Meta:
 		db_table='Sala'
 		verbose_name='sala'
 		verbose_name_plural='salas'
-		def __unicode__(self):
-			return self.nombre+' '+self.descripcion 
+	def __unicode__(self):
+		return self.nombre
 	
 class Vitrina(models.Model):
 	numero=models.TextField(null=True,blank=True)

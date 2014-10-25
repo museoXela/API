@@ -1,41 +1,34 @@
+from __future__ import unicode_literals
 from bicefalo.authentication import OAuth20Authentication
+from bicefalo.utils import CustomResource
 from tastypie.authorization import DjangoAuthorization
-from tastypie.resources import ModelResource
-
-class Traslado(ModelResource):
+from models import Traslado, Caja, Sala, Vitrina
+class Traslado(CustomResource):
     class Meta:
         queryset= Traslado.objects.all()
-        resource_name= 'traslado'
+        resource_name= 'traslados'
         allowed_methods=['get','post','put']
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
-        
-    def alter_list_data_to_serialize(self, request, data):
-        return data["objects"]
     
-class Caja(ModelResource):
+class Caja(CustomResource):
     class Meta:
         queryset= Caja.objects.all()
-        resource_name= 'caja'
+        resource_name= 'cajas'
         allowed_methods=['get','post','put']
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
-        
-    def alter_list_data_to_serialize(self, request, data):
-        return data["objects"]
-    
-class Sala(ModelResource):
+
+class Sala(CustomResource):
     class Meta:
         queryset= Sala.objects.all()
-        resource_name= 'sala'
+        resource_name= 'salas'
+        fields=['nombre', 'descripcion','fotografia']
         allowed_methods=['get','post','put']
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
         
-    def alter_list_data_to_serialize(self, request, data):
-        return data["objects"]
-    
-class Vitrina(ModelResource):
+class Vitrina(CustomResource):
     class Meta:
         queryset= Vitrina.objects.all()
         resource_name= 'vitrina'
@@ -43,6 +36,4 @@ class Vitrina(ModelResource):
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
         
-    def alter_list_data_to_serialize(self, request, data):
-        return data["objects"]
-# Create your views here.
+enabled_resources=[Traslado,Caja, Sala, Vitrina]

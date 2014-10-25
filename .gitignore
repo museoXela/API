@@ -12,6 +12,7 @@ build
 eggs
 parts
 bin
+run
 var
 sdist
 develop-eggs
@@ -41,7 +42,7 @@ Scripts
 *.pyc
 *~
 *.db
- 
+bin/
 # MacOSX
 .DS_Store
 # C extensions

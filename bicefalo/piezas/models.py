@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from countries.models import Country
-
+from django.template.defaultfilters import slugify
 
 class Autor(models.Model):
     pais = models.ForeignKey(Country, related_name='autores')
@@ -17,10 +17,8 @@ class Autor(models.Model):
     def __unicode__(self):
         return self.nombre + ' ' + self.apellido
     
-    
 class Pieza(models.Model):
     from usuarios.models import Perfil
-    prepopulated_fields = {'slug':('codigoSlug',)}
     #Definicion de campos
     codigo = models.CharField(primary_key=True, max_length=20)
     codigoSlug = models.SlugField(blank=True)
@@ -40,23 +38,36 @@ class Pieza(models.Model):
     maestra = models.BooleanField(default=False, blank=True)
     exhibicion = models.BooleanField(default=False, blank =True)
     altura = models.FloatField(blank=True, null=True)
-    ancho = models.FloatField(blank=True)
-    grosor = models.FloatField(blank=True)
-    largo = models.FloatField(blank=True)
-    diametro = models.FloatField(blank=True)
+    ancho = models.FloatField(blank=True, null=True)
+    grosor = models.FloatField(blank=True, null=True)
+    largo = models.FloatField(blank=True, null=True)
+    diametro = models.FloatField(blank=True, null=True)
     
     class Meta:
         db_table='Pieza'
         verbose_name='pieza'
         verbose_name_plural='piezas'
+        
+    def save(self):
+        super(Pieza, self).save()
+        self.codigoSlug = slugify(self.codigo)
+        super(Pieza, self).save()
     
+    def get_profile_image(self):
+        try:
+            foto = Fotografia.objects.filter(pieza = self).all()
+            return foto.get(perfil=True).ruta
+        except:
+            return ""
+    def get_categoria(self):
+        return unicode(self.clasificacion.categoria)
     def __unicode__(self):
         return self.codigo
 
 class Fotografia(models.Model):
     from operaciones.models import Mantenimiento
-    mantenimiento = models.ForeignKey(Mantenimiento, blank=True, related_name='mantenimiento')
-    pieza = models.ForeignKey(Pieza, blank=True, null=True)
+    mantenimiento = models.ForeignKey(Mantenimiento, blank=True, null=True, related_name='fotografias')
+    pieza = models.ForeignKey('Pieza', blank=True, null=True)
     tipo = models.SmallIntegerField(blank=True)
     ruta = models.ImageField(upload_to='piezas')
     perfil = models.BooleanField(default=True)
@@ -65,7 +76,7 @@ class Fotografia(models.Model):
         db_table='Fotografia'
         verbose_name='fotografía'
         verbose_name_plural='fotografías'
-        
+    
 class Clasificacion(models.Model):
     from registro.models import Ficha
     from colecciones.models import Coleccion, Categoria

@@ -1,24 +1,21 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from bicefalo.authentication import OAuth20Authentication
-from django.contrib.auth.models import User
-from tastypie.authorization import DjangoAuthorization
-from tastypie.resources import ModelResource
-from tastypie.http import *
 
-class UserResource(ModelResource):
-    
+from __future__ import unicode_literals
+from bicefalo.authentication import OAuth20Authentication
+from bicefalo.utils import CustomResource
+from tastypie.authorization import DjangoAuthorization
+from django.contrib.auth.models import User
+
+class UserResource(CustomResource):    
     class Meta:
         queryset = User.objects.all()
         resource_name = 'usuarios'
-        allowed_methods = ['get','post' ,'put']
         fields = ['username','date_joined','first_name','last_name','is_staff']       
         detail_uri_name = 'username'
+        allowed_methods=['get','post','put']
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
-        
-    def alter_list_data_to_serialize(self, request, data):
-        return data["objects"]
     
     def login(self, request, **kwargs):
         from django.contrib.auth import authenticate, login      
@@ -55,4 +52,4 @@ class UserResource(ModelResource):
             url(r'^logout/$', self.wrap_view('logout'), name='logout'),
             ]
         
-    
+enabled_resources=[UserResource]
