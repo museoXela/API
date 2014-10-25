@@ -87,7 +87,7 @@ class Voluntario(CustomResource):
     def dehydrate_apellido(self, bundle):
         return unicode(bundle.obj.usuario.last_name)    
     
-    def dehydrate_investigaciones(self, request, bundle):
+    def dehydrate_investigaciones(self, bundle):
         return self.get_investigaciones(bundle.obj)
         
     def get_investigaciones(self, obj):
