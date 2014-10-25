@@ -12,6 +12,8 @@ build
 eggs
 parts
 bin
+run
+logs
 var
 sdist
 develop-eggs
