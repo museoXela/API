@@ -88,15 +88,17 @@ class Voluntario(CustomResource):
         return unicode(bundle.obj.usuario.last_name)    
     
     def dehydrate_investigaciones(self, bundle):
-        return self.get_investigaciones(bundle.obj)
+        return self.get_investigaciones(bundle.obj, bundle.request)
         
-    def get_investigaciones(self, obj):
-        from investigacion.resources import Investigacion
-        from tastypie.utils import trailing_slash
+    def get_investigaciones(self, obj, request):
+        from investigacion.resources import CustomInvestigacion
         list = obj.investigaciones.order_by('-fecha')[:3]
         objects = []
+        res = CustomInvestigacion()
         for investigacion in list:
-            objects.append('/%s/investigaciones/%s%s' %(self.api_name, investigacion.pk, trailing_slash()))
+            bundle = res.build_bundle(obj=investigacion, request = request)
+            bundle = res.full_dehydrate(bundle)
+            objects.append(bundle)
         return objects
     
 enabled_resources=[UserResource, Groups]

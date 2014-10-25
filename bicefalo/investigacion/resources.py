@@ -7,7 +7,7 @@ from tastypie.http import HttpGone, HttpMultipleChoices
 from tastypie import fields
 from tastypie.resources import ALL
 from django.conf.urls import url
-from models import Investigacion, LinkInvestigacion
+from models import Investigacion as Investigaciones, LinkInvestigacion
 
 class LinkResource(CustomResource):
     class Meta:
@@ -22,7 +22,7 @@ class Investigacion(CustomResource):
     userFoto= fields.CharField(null=True, readonly=True)
     editor=fields.CharField(attribute='editor')
     class Meta:
-        queryset= Investigacion.objects.all()
+        queryset= Investigaciones.objects.all()
         resource_name='investigaciones'
         fields = ['id','titulo', 'contenido', 'resumen', 'fecha']
         allowed_methods=['get','post','put']
@@ -88,6 +88,16 @@ class Investigacion(CustomResource):
         return [
         url(r'^investigaciones/(?P<pk>\d+)/links/$', self.wrap_view('get_links'),name='investigacion_links'),]
 
+class CustomInvestigacion(CustomResource):
+    class Meta:
+        queryset= Investigaciones.objects.all()
+        resource_name='investigaciones'
+        fields = ['id','titulo']
+        allowed_methods=['get']
+        include_resource_uri = False
+        always_return_data = False
+        authorization = DjangoAuthorization()
+        authentication = OAuth20Authentication()
 
 enabled_resources=[Investigacion]
 web_resources=[Investigacion]
