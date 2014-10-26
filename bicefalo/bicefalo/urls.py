@@ -2,6 +2,7 @@ from django.conf.urls import patterns, include, url
 from tastypie.api import Api
 from django.contrib import admin
 from bicefalo.utils import autodiscover
+from bicefalo.resources import Busqueda
 admin.autodiscover()
 api = Api(api_name='v1')
 web_api = Api(api_name='v1')
@@ -18,6 +19,7 @@ def register_web_resources(resources=None):
             
 autodiscover('resources','enabled_resources', register_resources)
 autodiscover('resources','web_resources', register_web_resources)
+
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^oAuth/', include('provider.oauth2.urls', namespace='oauth2')),
