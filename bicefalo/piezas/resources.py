@@ -8,8 +8,9 @@ from tastypie.authorization import DjangoAuthorization
 from tastypie.resources import ALL
 from tastypie import fields
 from models import Pieza as Piezas, Autor, Fotografia, Clasificacion
-
-
+from tastypie.resources import ObjectDoesNotExist, MultipleObjectsReturned
+from tastypie.http import HttpGone, HttpMultipleChoices
+from django.conf.urls import url
 # Create your views here.
 
 class Pieza (CustomResource):
@@ -47,15 +48,6 @@ class Pieza (CustomResource):
         res.log_throttled_access(request)
         return res.create_response(request, objects)
     
-    def get_investigaciones(self, obj):
-        from investigacion.resources import Investigacion
-        from tastypie.utils import trailing_slash
-        res = Investigacion()
-        list = obj.investigaciones.all()
-        objects = []
-        for investigacion in list:
-            objects.append('/%s/investigaciones/%s%s' %(self.api_name, investigacion.pk, trailing_slash()))
-        return objects
         
 class Exhibicion(Pieza):
     
@@ -86,6 +78,30 @@ class Exhibicion(Pieza):
     def dehydrate_categoria(self, bundle):
         return bundle.obj.get_categoria()
     
+    def get_investigaciones(self, request, **kwargs):
+        from investigacion.resources import Investigacion
+        from tastypie.paginator import Paginator
+        try:
+            bundle = self.build_bundle(data={'codigo':kwargs['codigo']}, request=request)
+            obj = self.cached_obj_get(bundle=bundle, **self.remove_api_resource_names(kwargs))
+        except ObjectDoesNotExist:
+            return HttpGone()
+        except MultipleObjectsReturned:
+            return HttpMultipleChoices("More than one resource is found at this uri")
+        res= Investigacion()
+        objects = []
+        list = obj.investigaciones.all()
+        list = Paginator(request.GET, list).page()['objects']
+        for obj in list:
+            bundle = res.build_bundle(obj=obj, request = request)
+            bundle = res.full_dehydrate(bundle)
+            objects.append(bundle)
+        res.log_throttled_access(request)
+        return res.create_response(request, objects)
+    def prepend_urls(self):
+        return [
+            url(r"^(?P<resource_name>%s)/(?P<codigo>\d+)/investigaciones/$" % self._meta.resource_name, self.wrap_view('get_investigaciones'), name="dispatch_piezas"),
+        ]
 class Autor (CustomResource):
     class Meta:
         queryset = Autor.objects.all()

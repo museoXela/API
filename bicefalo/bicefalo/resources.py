@@ -6,10 +6,11 @@ class Busqueda(Resource):
         self.method_check(request, allowed=['get'])
         self.throttle_check(request)
         keyword = kwargs['keyword']
-        investigaciones = 
+        investigaciones = self.get_investigaciones(keyword)
         
     def get_investigaciones(self, titulo):
-        
+        from investigacion.models import Investigacion 
+        objects = Investigacion.objects.filter()
     def prepend_urls(self):
         from django.conf.urls import url
         return [    
