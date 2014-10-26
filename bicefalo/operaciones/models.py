@@ -4,7 +4,7 @@ from django.db import models
 class Mantenimiento(models.Model):
 	procedimiento = models.IntegerField(null=True, blank=True)
 	metodoMaterial = models.CharField(null=True,blank=True,max_length=200)
-	fecha = models.DateField(auto_now=True, blank=True, null=True)
+	fecha = models.DateField(blank=True, null=True)
 	consolidacion = models.ForeignKey('Consolidacion')
 	
 	class Meta:
@@ -19,10 +19,10 @@ class Consolidacion(models.Model):
 	from piezas.models import Pieza
 	from usuarios.models import Perfil
 	limpieza= models.BooleanField(default=False)
-	fechaInicio = models.DateField(auto_now=True,blank=True,null=True)
+	fechaInicio = models.DateField(blank=True,null=True)
 	fechaFin = models.DateField(blank=True,null=True)
 	responsable=models.ForeignKey(Perfil) 
-	codigoPieza=models.ForeignKey(Pieza)
+	pieza=models.ForeignKey(Pieza)
 	
 	class Meta:
 		db_table='Consolidacion'

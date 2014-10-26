@@ -6,7 +6,7 @@ from bicefalo.authentication import OAuth20Authentication
 from bicefalo.utils import CustomResource
 from tastypie.authorization import DjangoAuthorization
 from tastypie.resources import ALL
-from tastypie import fields
+from tastypie import fields, http
 from models import Pieza as Piezas, Autor, Fotografia, Clasificacion
 from tastypie.resources import ObjectDoesNotExist, MultipleObjectsReturned
 from tastypie.http import HttpGone, HttpMultipleChoices
@@ -100,7 +100,7 @@ class Exhibicion(Pieza):
             return HttpMultipleChoices("More than one resource is found at this uri")
         res= Investigacion()
         objects = []
-        list = obj.investigaciones.all()
+        list = obj.investigaciones.filter(publicado=True)
         list = Paginator(request.GET, list).page()['objects']
         for obj in list:
             bundle = res.build_bundle(obj=obj, request = request)
@@ -108,6 +108,7 @@ class Exhibicion(Pieza):
             objects.append(bundle)
         res.log_throttled_access(request)
         return res.create_response(request, objects)
+    
     def get_search(self, request, **kwargs):
         from piezas.models import Pieza 
         from tastypie.paginator import Paginator
@@ -154,6 +155,7 @@ class Autor (CustomResource):
             return bundle
         else:
             raise http.HttpNotFound('El pais con el codigo %s no existe'%country_name)
+        
 class Fotografia (CustomResource):
     class Meta:
         queryset = Fotografia.objects.all()
@@ -164,6 +166,10 @@ class Fotografia (CustomResource):
         authentication = OAuth20Authentication()
         
 class Clasificacion (CustomResource):
+    coleccion = fields.CharField(attribute='coleccion')
+    categoria = fields.CharField(attribute='categoria')
+    ficha = fields.CharField(attribute='ficha')
+    
     class Meta:
         queryset = Clasificacion.objects.all()
         resource_name='clasificacion'
@@ -172,5 +178,35 @@ class Clasificacion (CustomResource):
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
         
+    def hydrate_coleccion(self, bundle):
+        from colecciones.models import Coleccion
+        coleccion = bundle.data['coleccion']
+        col = Coleccion.objects.get(nombre='coleccion')
+        if col:
+            bundle.data['coleccion'] = col
+        else:
+            raise http.HttpNotFound('no existe una coleccion con el nombre %s' % coleccion)
+        return bundle
+    
+    def hydrate_categoria(self, bundle):
+        from colecciones.models import Categoria
+        categoria = bundle.data['categoria']
+        cat = Categoria.objects.get(nombre='categoria')
+        if cat:
+            bundle.data['categoria'] = cat
+        else:
+            raise http.HttpNotFound('no existe una categoria con el nombre %s' % categoria)
+        return bundle
+    
+    def hydrate_ficha(self, bundle):
+        from registro.models import Ficha
+        ficha = bundle.data['ficha']
+        ficha_reg = Ficha.objects.get(nombre=ficha)
+        if ficha_reg:
+            bundle.data['ficha']= ficha_reg
+        else:
+            raise http.HttpNotFound('no existe una ficha con el nombre %s' % ficha)
+        return bundle
+    
 enabled_resources=[Pieza,Autor, Fotografia, Clasificacion]
 web_resources = [Exhibicion]

@@ -8,7 +8,6 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('registro', '__first__'),
-        ('operaciones', '__first__'),
         ('colecciones', '__first__'),
         ('countries', '__first__'),
         ('usuarios', '0003_auto_20141025_1556'),
