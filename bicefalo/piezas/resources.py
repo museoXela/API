@@ -147,15 +147,13 @@ class Autor (CustomResource):
     def hydrate_pais(self, bundle):
         from countries.models import Country
         from tastypie import http
-        import pdb
-        pdb.set_trace()
         country_name = bundle.data['pais']
         country = Country.objects.get(iso=country_name)
         if country:
             bundle.data['pais'] = country
+            return bundle
         else:
             raise http.HttpNotFound('El pais con el codigo %s no existe'%country_name)
-        
 class Fotografia (CustomResource):
     class Meta:
         queryset = Fotografia.objects.all()
