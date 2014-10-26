@@ -56,9 +56,3 @@ class Busqueda(Resource):
             bundle = res.full_dehydrate(bundle)
             objects.append(bundle)
         return objects
-                
-    def prepend_urls(self):
-        from django.conf.urls import url
-        return [    
-            url(r'^busqueda/(?P<keyworkd>\w+)/$', self.wrap_view('get_search'), name='masterPieces_dispatched'),                   
-            ]

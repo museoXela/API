@@ -108,9 +108,27 @@ class Exhibicion(Pieza):
             objects.append(bundle)
         res.log_throttled_access(request)
         return res.create_response(request, objects)
+    def get_search(self, request, **kwargs):
+        from piezas.models import Pieza 
+        from tastypie.paginator import Paginator
+        self.method_check(request, allowed=['get'])
+        self.is_authenticated(request)
+        self.throttle_check(request)
+        keyword = request.GET['keyword']
+        object_list = []
+        objects = Pieza.objects.filter(exhibicion=True).filter(nombre__contains=keyword)
+        list = Paginator(request.GET, objects).page()['objects']
+        for obj in list:
+            bundle = self.build_bundle(obj=obj, request = request)
+            bundle = self.full_dehydrate(bundle)
+            object_list.append(bundle)
+        self.log_throttled_access(request)
+        return self.create_response(request, object_list)
     
     def prepend_urls(self):
+        from tastypie.utils import trailing_slash
         return [
+                url(r'^(?P<resource_name>%s)/buscar%s$' % (self._meta.resource_name,trailing_slash()), self.wrap_view('get_search'), name = 'search'),
                 url(r"^(?P<resource_name>%s)/(?P<codigo>\M[\.\d{1,4}]+)/investigaciones/$" % self._meta.resource_name, self.wrap_view('get_investigaciones'), name="dispatch_piezas"),
                 url(r"^(?P<resource_name>%s)/(?P<codigo>\M[\.\d{1,4}]+w+)/$" % self._meta.resource_name, self.wrap_view('dispatch_detail'), name="dispatch_piezas"),
         ]
