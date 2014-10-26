@@ -69,7 +69,7 @@ class Exhibicion(Pieza):
         bundle.data['descripcion'] = unicode(bundle.obj.descripcion)
         bundle.data['clasificacion'] = bundle.obj.get_clasificacion()
         bundle.data['coleccion'] = bundle.obj.get_coleccion()
-        bundle.data['investigaciones'] = self.get_investigaciones(bundle.obj)
+        bundle.data['investigaciones'] = self.get_investigaciones_ref(bundle.obj)
         return bundle
     
     def dehydrate_fotografia(self, bundle):
@@ -77,6 +77,16 @@ class Exhibicion(Pieza):
     
     def dehydrate_categoria(self, bundle):
         return bundle.obj.get_categoria()
+    
+    def get_investigaciones_ref(self, obj):
+        from investigacion.resources import Investigacion
+        from tastypie.utils import trailing_slash
+        res = Investigacion()
+        list = obj.investigaciones.all()
+        objects = []
+        for investigacion in list:
+            objects.append('/%s/investigaciones/%s%s' %(self.api_name, investigacion.pk, trailing_slash()))
+        return objects
     
     def get_investigaciones(self, request, **kwargs):
         from investigacion.resources import Investigacion
@@ -98,10 +108,13 @@ class Exhibicion(Pieza):
             objects.append(bundle)
         res.log_throttled_access(request)
         return res.create_response(request, objects)
+    
     def prepend_urls(self):
         return [
-            url(r"^(?P<resource_name>%s)/(?P<codigo>\d+)/investigaciones/$" % self._meta.resource_name, self.wrap_view('get_investigaciones'), name="dispatch_piezas"),
+                url(r"^(?P<resource_name>%s)/(?P<codigo>\M[\.\d{1,4}]+)/investigaciones/$" % self._meta.resource_name, self.wrap_view('get_investigaciones'), name="dispatch_piezas"),
+                url(r"^(?P<resource_name>%s)/(?P<codigo>\M[\.\d{1,4}]+w+)/$" % self._meta.resource_name, self.wrap_view('dispatch_detail'), name="dispatch_piezas"),
         ]
+        
 class Autor (CustomResource):
     class Meta:
         queryset = Autor.objects.all()
