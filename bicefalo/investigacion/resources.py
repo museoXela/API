@@ -41,7 +41,7 @@ class Investigacion(CustomResource):
             bundle = res.build_bundle(obj=comments, request=request)
             bundle = res.full_dehydrate(bundle)
             objects.append(bundle)
-        return objects
+        return obj
     
     def dehydrate_userFoto(self, bundle):
         return unicode(bundle.obj.editor.fotografia)
@@ -59,7 +59,8 @@ class Investigacion(CustomResource):
         return bundle
     
     def get_piezas(self, request, **kwargs):
-        from piezas.resources import Pieza
+        from piezas.resources import Exhibicion
+        from tastypie.paginator import Paginator
         try:
             bundle = self.build_bundle(data={'pk':kwargs['pk']}, request=request)
             obj = self.cached_obj_get(bundle=bundle, **self.remove_api_resource_names(kwargs))
@@ -67,16 +68,21 @@ class Investigacion(CustomResource):
             return HttpGone()
         except MultipleObjectsReturned:
             return HttpMultipleChoices("More than one resource is found at this uri")
-        res= Pieza()
-        list = obj.piezas.all()
+        res= Exhibicion()
         objects = []
-        for comments in list:
-            bundle = res.build_bundle(obj=comments, request=request)
+        list = obj.piezas.all()
+        list = Paginator(request.GET, list).page()['objects']
+        for obj in list:
+            bundle = res.build_bundle(obj=obj, request = request)
             bundle = res.full_dehydrate(bundle)
             objects.append(bundle)
-
         res.log_throttled_access(request)
         return res.create_response(request, objects)
+    
+    def prepend_urls(self):
+        return [
+            url(r"^(?P<resource_name>%s)/(?P<pk>\d+)/piezas/$" % self._meta.resource_name, self.wrap_view('get_piezas'), name="dispatch_piezas"),
+        ]
 
 class CustomInvestigacion(CustomResource):
     class Meta:
