@@ -5,6 +5,10 @@ class Busqueda(Resource):
     def get_search(self, request, **kwargs):
         self.method_check(request, allowed=['get'])
         self.throttle_check(request)
+        keyword = kwargs['keyword']
+        investigaciones = 
+        
+    def get_investigaciones(self, titulo):
         
     def prepend_urls(self):
         from django.conf.urls import url

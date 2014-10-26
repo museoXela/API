@@ -41,7 +41,7 @@ class Investigacion(CustomResource):
             bundle = res.build_bundle(obj=comments, request=request)
             bundle = res.full_dehydrate(bundle)
             objects.append(bundle)
-        return obj
+        return objects
     
     def dehydrate_userFoto(self, bundle):
         return unicode(bundle.obj.editor.fotografia)
