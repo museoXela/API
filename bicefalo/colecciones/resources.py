@@ -13,6 +13,7 @@ class Categoria(CustomResource):
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
         filtering={'nombre':ALL,}
+        
 class Coleccion(CustomResource):
     class Meta:
         queryset = Coleccion.objects.all()
@@ -25,3 +26,4 @@ class Coleccion(CustomResource):
                    'nombre':ALL,}
 
 enabled_resources=[Categoria,Coleccion]
+web_resources=[Coleccion]
