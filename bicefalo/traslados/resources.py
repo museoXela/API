@@ -71,8 +71,7 @@ class Caja(CustomResource):
 class Sala(CustomResource):
     class Meta:
         queryset= Sala.objects.all()
-        resource_name= 'salas'
-        fields=['nombre', 'descripcion','fotografia']      
+        resource_name= 'salas'   
         allowed_methods=['get','post','put']
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()

@@ -25,8 +25,8 @@ class Caja(models.Model):
 		db_table='Caja'
 		verbose_name='caja'
 		verbose_name_plural='cajas'
-		def __unicode__(self):
-			return self.codigo 
+	def __unicode__(self):
+		return self.codigo 
 	
 class Sala(models.Model):
 	nombre=models.CharField(unique=True,null=True,blank=True,max_length=50)
