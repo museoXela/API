@@ -6,7 +6,7 @@ class Eventos (models.Model):
     from usuarios.models import Perfil
     nombre = models.CharField(unique=True, null=True,blank=True,max_length=45)
     descripcion=models.TextField(null=True,blank=True)
-    afiche =models.ImageField(null=True,blank=True, upload_to='afiches')
+    afiche =models.URLField(null=True,blank=True)
     fecha=models.DateField(blank=True, null=True)
     sala=models.ForeignKey(Sala)
     usuario =models.ForeignKey(Perfil)

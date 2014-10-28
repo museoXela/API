@@ -7,7 +7,7 @@ from bicefalo.utils import CustomResource
 from tastypie.authorization import DjangoAuthorization
 from tastypie.resources import ALL
 from tastypie import fields, http
-from models import Pieza as Piezas, Autor, Fotografia, Clasificacion
+from models import Pieza as Piezas, Autor, Fotografia, Clasificacion as Clasificaciones
 from tastypie.resources import ObjectDoesNotExist, MultipleObjectsReturned
 from tastypie.http import HttpGone, HttpMultipleChoices
 from django.conf.urls import url
@@ -133,7 +133,22 @@ class Exhibicion(Pieza):
                 url(r"^(?P<resource_name>%s)/(?P<codigo>\M[\.\d{1,4}]+)/investigaciones/$" % self._meta.resource_name, self.wrap_view('get_investigaciones'), name="dispatch_piezas"),
                 url(r"^(?P<resource_name>%s)/(?P<codigo>\M[\.\d{1,4}]+w+)/$" % self._meta.resource_name, self.wrap_view('dispatch_detail'), name="dispatch_piezas"),
         ]
-        
+    
+    def get_object_list(self, request):
+        list_piezas = []
+        import pdb
+        pdb.set_trace()
+        if request.GET:
+            coleccion = request.GET['coleccion']
+            categoria = request.GET['categoria']
+            if coleccion or categoria:
+                objects = Clasificaciones.objects.filter(coleccion=coleccion, categoria=categoria)
+                for clasificacion in objects:
+                    for pieza in clasificacion.piezas:
+                        if pieza not in list_piezas:
+                            list_piezas.append(pieza)
+                return list_piezas
+        return super(Exhibicion, self).get_object_list(request)
 class Autor (CustomResource):
     pais = fields.CharField(attribute='pais')
     class Meta:
@@ -171,7 +186,7 @@ class Clasificacion (CustomResource):
     ficha = fields.CharField(attribute='ficha')
     
     class Meta:
-        queryset = Clasificacion.objects.all()
+        queryset = Clasificaciones.objects.all()
         resource_name='clasificacion'
         allowed_methods=['get','post','put']
         always_return_data = False

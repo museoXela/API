@@ -19,10 +19,10 @@ class Ficha(models.Model):
 class Registro(models.Model):
     from operaciones.models import Consolidacion
     from piezas.models import Pieza
-    registroPieza = models.ForeignKey(Pieza,blank=True, related_name='registro')
-    registroConsolidacion = models.ForeignKey(Consolidacion, blank=True, related_name='registro')
+    pieza = models.ForeignKey(Pieza,blank=True, related_name='registro')
+    consolidacion = models.ForeignKey(Consolidacion, blank=True, related_name='registro')
     fecha = models.DateField(auto_now=True)
-    consolidacion = models.BooleanField(default=False)
+    es_consolidacion = models.BooleanField(default=False)
 
     class Meta:
         db_table='Registro'
