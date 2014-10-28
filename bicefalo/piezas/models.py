@@ -78,6 +78,8 @@ class Fotografia(models.Model):
         db_table='Fotografia'
         verbose_name='fotografía'
         verbose_name_plural='fotografías'
+    def __unicode__(self):
+        return unicode(self.ruta)
     
 class Clasificacion(models.Model):
     from registro.models import Ficha

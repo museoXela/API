@@ -117,7 +117,7 @@ class Exhibicion(Pieza):
         self.throttle_check(request)
         keyword = request.GET['keyword']
         object_list = []
-        objects = Pieza.objects.filter(exhibicion=True).filter(nombre__contains=keyword)
+        objects = Pieza.objects.filter(exhibicion=True).filter(nombre__icontains=keyword)
         list = Paginator(request.GET, objects).page()['objects']
         for obj in list:
             bundle = self.build_bundle(obj=obj, request = request)
@@ -136,8 +136,6 @@ class Exhibicion(Pieza):
     
     def get_object_list(self, request):
         list_piezas = []
-        import pdb
-        pdb.set_trace()
         if request.GET:
             coleccion = request.GET['coleccion']
             categoria = request.GET['categoria']

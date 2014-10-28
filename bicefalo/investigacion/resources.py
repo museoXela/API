@@ -153,7 +153,7 @@ class Investigacion(CustomResource):
         self.throttle_check(request)
         keyword = request.GET['keyword']
         object_list = []
-        objects = Investigaciones.objects.filter(publicado=True).filter(titulo__contains=keyword)
+        objects = Investigaciones.objects.filter(publicado=True).filter(titulo__icontains=keyword)
         list = Paginator(request.GET, objects).page()['objects']
         for obj in list:
             bundle = self.build_bundle(obj=obj, request = request)

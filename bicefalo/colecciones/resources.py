@@ -18,7 +18,7 @@ class Categoria(CustomResource):
         if request.GET:
             id = request.GET['coleccion']
             if id:
-                return Colecciones.objects.get(id=id).categorias.all()
+                return Colecciones.objects.get(id=id).categorias.distinct()
         return super(Categoria, self).get_object_list(request)
     
 class Coleccion(CustomResource):
@@ -31,6 +31,7 @@ class Coleccion(CustomResource):
         authentication = OAuth20Authentication()
         filtering={
                    'nombre':ALL,}
+    
 
 enabled_resources=[Categoria,Coleccion]
-web_resources=[Coleccion]
+web_resources=[Coleccion, Categoria]
