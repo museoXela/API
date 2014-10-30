@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 from bicefalo.authentication import OAuth20Authentication
 from bicefalo.utils import CustomResource
 from tastypie.authorization import DjangoAuthorization
-from tastypie.resources import ALL
+from tastypie.resources import ALL, ALL_WITH_RELATIONS
 from tastypie import fields, http
 from models import Pieza as Piezas, Autor, Fotografia, Clasificacion as Clasificaciones
 from tastypie.resources import ObjectDoesNotExist, MultipleObjectsReturned
@@ -29,9 +29,21 @@ class Pieza (CustomResource):
                      'regionCultural':ALL,
                      'maestra':ALL,
                      'exhibicion':ALL,
-                     'fechamiento':ALL                     
+                     'fechamiento':ALL,
+                     'clasificacion':ALL,                     
         } 
         
+    def build_filters(self, filters=None):
+        if filters is None:
+            filters = {}       
+        if('categoria' in filters):
+            filters['clasificacion__categoria'] = filters['categoria']
+            del filters['categoria']         
+        if('coleccion' in filters):
+            filters['clasificacion__coleccion'] = filters['coleccion']
+            del filters['coleccion']    
+        return super(Pieza, self).build_filters(filters)
+    
     def dispatch_master(self, request, **kwargs):
         self.method_check(request, allowed=['get'])
         self.throttle_check(request)
@@ -52,7 +64,6 @@ class Pieza (CustomResource):
 class Exhibicion(Pieza):
     
     fotografia = fields.CharField(null=True)
-    categoria = fields.CharField(null=True)
     pais= fields.CharField(null=True, attribute='pais')
 
     class Meta:
@@ -61,22 +72,41 @@ class Exhibicion(Pieza):
         allowed_methods=['get']
         fields=['codigo','nombre','fechamiento', 'resumen']
         always_return_data = False
+        filtering = {
+                     'fechaIngreso':ALL,
+                     'procedencia':ALL,
+                     'regionCultural':ALL,
+                     'maestra':ALL,
+                     'exhibicion':ALL,
+                     'fechamiento':ALL,
+                     'clasificacion':ALL,                     
+        } 
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
         
     def alter_detail_data_to_serialize(self, request, bundle):
         del bundle.data['resumen']
-        bundle.data['descripcion'] = unicode(bundle.obj.descripcion)
+        bundle.data['descripcion'] = unicode(bundle.obj.descripcion)        
+        bundle.data['investigaciones'] = self.get_investigaciones_ref(bundle.obj)
+        return bundle
+    def dehydrate(self, bundle):
+        bundle.data['categoria'] = bundle.obj.get_categoria()
         bundle.data['clasificacion'] = bundle.obj.get_clasificacion()
         bundle.data['coleccion'] = bundle.obj.get_coleccion()
-        bundle.data['investigaciones'] = self.get_investigaciones_ref(bundle.obj)
         return bundle
     
     def dehydrate_fotografia(self, bundle):
         return bundle.obj.get_profile_image()
     
-    def dehydrate_categoria(self, bundle):
-        return bundle.obj.get_categoria()
+    def build_filters(self, filters=None):
+        if filters is None:
+            filters = {}       
+        orm_filters = super(Exhibicion, self).build_filters(filters)
+        if('categoria' in filters):
+            filters['c'] = filters['categoria']        
+        if('coleccion' in filters):
+            filters['clasificacion__coleccion__id'] = filters['coleccion']    
+        return orm_filters
     
     def get_investigaciones_ref(self, obj):
         from investigacion.resources import Investigacion
@@ -133,20 +163,7 @@ class Exhibicion(Pieza):
                 url(r"^(?P<resource_name>%s)/(?P<codigo>\M[\.\d{1,4}]+)/investigaciones/$" % self._meta.resource_name, self.wrap_view('get_investigaciones'), name="dispatch_piezas"),
                 url(r"^(?P<resource_name>%s)/(?P<codigo>\M[\.\d{1,4}]+w+)/$" % self._meta.resource_name, self.wrap_view('dispatch_detail'), name="dispatch_piezas"),
         ]
-    
-    def get_object_list(self, request):
-        list_piezas = []
-        if request.GET:
-            coleccion = request.GET['coleccion']
-            categoria = request.GET['categoria']
-            if coleccion or categoria:
-                objects = Clasificaciones.objects.filter(coleccion=coleccion, categoria=categoria)
-                for clasificacion in objects:
-                    for pieza in clasificacion.piezas:
-                        if pieza not in list_piezas:
-                            list_piezas.append(pieza)
-                return list_piezas
-        return super(Exhibicion, self).get_object_list(request)
+
 class Autor (CustomResource):
     pais = fields.CharField(attribute='pais')
     class Meta:
@@ -168,7 +185,7 @@ class Autor (CustomResource):
             return bundle
         else:
             raise http.HttpNotFound('El pais con el codigo %s no existe'%country_name)
-        
+    
 class Fotografia (CustomResource):
     class Meta:
         queryset = Fotografia.objects.all()

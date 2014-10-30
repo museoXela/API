@@ -4,6 +4,7 @@ from bicefalo.utils import CustomResource
 from tastypie.authorization import DjangoAuthorization
 from piezas.models import Categoria as Categorias, Coleccion as Colecciones
 from tastypie.resources import ALL
+
 class Categoria(CustomResource):
     class Meta:
         queryset = Categorias.objects.all()
@@ -29,9 +30,8 @@ class Coleccion(CustomResource):
         always_return_data = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
-        filtering={
-                   'nombre':ALL,}
+        filtering={'nombre':ALL,}
     
 
-enabled_resources=[Categoria,Coleccion]
+enabled_resources=[Coleccion,Categoria]
 web_resources=[Coleccion, Categoria]
