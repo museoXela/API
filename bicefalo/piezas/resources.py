@@ -33,16 +33,19 @@ class Pieza (CustomResource):
                      'clasificacion':ALL,                     
         } 
         
-    def build_filters(self, filters=None):
-        if filters is None:
-            filters = {}       
-        if('categoria' in filters):
-            filters['clasificacion__categoria'] = filters['categoria']
-            del filters['categoria']         
-        if('coleccion' in filters):
-            filters['clasificacion__coleccion'] = filters['coleccion']
-            del filters['coleccion']    
-        return super(Pieza, self).build_filters(filters)
+    def get_object_list(self, request):
+        import pdb 
+        pdb.set_trace()
+        if request.GET:
+            data = request.GET
+            if 'coleccion' in data and 'categoria' in data:
+                piezas = Piezas.objects.filter(clasificacion__coleccion=data['coleccion']).filter(clasificacion__categoria=data['categoria'])
+                return piezas
+            if 'coleccion' in data:
+                return Piezas.objects.filter(clasificacion__coleccion=data['coleccion'])            
+            if 'categoria' in data:
+                return Piezas.objects.filter(clasificacion__categoria=data['categoria'])            
+        return super(Pieza, self).get_object_list(request)
     
     def dispatch_master(self, request, **kwargs):
         self.method_check(request, allowed=['get'])
@@ -207,6 +210,7 @@ class Clasificacion (CustomResource):
         always_return_data = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
+        filtering{'coleccion':ALL, 'categoria':ALL}
         
     def hydrate_coleccion(self, bundle):
         from colecciones.models import Coleccion
@@ -239,4 +243,4 @@ class Clasificacion (CustomResource):
         return bundle
     
 enabled_resources=[Pieza,Autor, Fotografia, Clasificacion]
-web_resources = [Exhibicion]
+web_resources = [Exhibicion, Clasificacion]
