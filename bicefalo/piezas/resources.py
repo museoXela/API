@@ -210,7 +210,7 @@ class Clasificacion (CustomResource):
         always_return_data = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
-        filtering{'coleccion':ALL, 'categoria':ALL}
+        filtering={'coleccion':ALL, 'categoria':ALL}
         
     def hydrate_coleccion(self, bundle):
         from colecciones.models import Coleccion
