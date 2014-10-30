@@ -100,16 +100,6 @@ class Exhibicion(Pieza):
     def dehydrate_fotografia(self, bundle):
         return bundle.obj.get_profile_image()
     
-    def build_filters(self, filters=None):
-        if filters is None:
-            filters = {}       
-        orm_filters = super(Exhibicion, self).build_filters(filters)
-        if('categoria' in filters):
-            filters['c'] = filters['categoria']        
-        if('coleccion' in filters):
-            filters['clasificacion__coleccion__id'] = filters['coleccion']    
-        return orm_filters
-    
     def get_investigaciones_ref(self, obj):
         from investigacion.resources import Investigacion
         from tastypie.utils import trailing_slash
@@ -241,5 +231,28 @@ class Clasificacion (CustomResource):
             raise http.HttpNotFound('no existe una ficha con el nombre %s' % ficha)
         return bundle
     
+class PublicClasificacion(CustomResource):
+    class Meta:
+        queryset = Clasificaciones.objects.all()
+        include_resource_uri=False
+        resource_name='clasificacion'
+        allowed_methods=['get']        
+        fields=['id','nombre']
+        authorization = DjangoAuthorization()
+        authentication = OAuth20Authentication()
+    
+    def get_object_list(self, request):
+        objects = super(PublicClasificacion, self).get_object_list(request)
+        if request.GET:
+            data = request.GET
+            if 'coleccion' in data and 'categoria' in data:
+                piezas = objects.filter(coleccion=data['coleccion']).filter(categoria=data['categoria'])
+                return piezas
+            if 'coleccion' in data:
+                return objects.filter(coleccion=data['coleccion'])            
+            if 'categoria' in data:
+                return objects.filter(categoria=data['categoria'])            
+        return objects
+        
 enabled_resources=[Pieza,Autor, Fotografia, Clasificacion]
-web_resources = [Exhibicion, Clasificacion]
+web_resources = [Exhibicion, PublicClasificacion]
