@@ -23,6 +23,9 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^oAuth/', include('provider.oauth2.urls')),
     url(r'^web/', include(web_api.urls)),
-    url(r'^api/', include(api.urls)),
+    url(r'^api/', include(api.urls, namespace='api_swagger')),
+    url(r'^docs/', include('tastypie_swagger.urls', namespace='api_swagger'),
+        kwargs={'namespace':'api_swagger',
+                'tastypie_api_module':'bicefalo.urls.api',}),
 )
 

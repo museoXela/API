@@ -31,7 +31,7 @@ class Perfil(models.Model):
 def create_profile(sender, **kwargs):
     user = kwargs.get('instance')
     if kwargs.get('created', False):
-        if not user.profile:
+        if not user.perfil:
             Perfil.objects.create(usuario=kwargs.get('instance'))
     elif user:
         user.perfil.save()

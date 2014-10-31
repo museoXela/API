@@ -27,7 +27,7 @@ class UserResource(CustomResource):
     class Meta:
         queryset = User.objects.all()
         resource_name = 'usuarios'
-        fields = ['username','date_joined','first_name','last_name','is_staff']       
+        fields = ['username','date_joined','first_name','last_name','is_staff','email']       
         detail_uri_name = 'username'
         allowed_methods=['get','post','put','patch']
         always_return_data = False
