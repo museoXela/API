@@ -94,7 +94,9 @@ class Exhibicion(Pieza):
     
     def dehydrate(self, bundle):
         bundle.data['categoria'] = bundle.obj.get_categoria()
+        bundle.data['idCategoria']=bundle.obj.clasificacion.categoria.id
         bundle.data['coleccion'] = bundle.obj.get_coleccion()
+        bundle.data['idColeccion'] = bundle.obj.clasificacion.coleccion.id
         return bundle
     
     def dehydrate_fotografia(self, bundle):
