@@ -34,16 +34,17 @@ class Pieza (CustomResource):
         } 
         
     def get_object_list(self, request):
+        objects = super(Pieza, self).get_object_list(request)
         if request.GET:
             data = request.GET
             if 'coleccion' in data and 'categoria' in data:
-                piezas = Piezas.objects.filter(clasificacion__coleccion=data['coleccion']).filter(clasificacion__categoria=data['categoria'])
+                piezas = objects.filter(clasificacion__coleccion=data['coleccion']).filter(clasificacion__categoria=data['categoria'])
                 return piezas
             if 'coleccion' in data:
-                return Piezas.objects.filter(clasificacion__coleccion=data['coleccion'])            
+                return objects.filter(clasificacion__coleccion=data['coleccion'])            
             if 'categoria' in data:
-                return Piezas.objects.filter(clasificacion__categoria=data['categoria'])            
-        return super(Pieza, self).get_object_list(request)
+                return objects.filter(clasificacion__categoria=data['categoria'])            
+        return objects
     
     def dispatch_master(self, request, **kwargs):
         self.method_check(request, allowed=['get'])
@@ -98,7 +99,7 @@ class Exhibicion(Pieza):
     
     def dehydrate_fotografia(self, bundle):
         return bundle.obj.get_profile_image()
-        
+    
     def get_investigaciones_ref(self, obj):
         from investigacion.resources import Investigacion
         from tastypie.utils import trailing_slash
@@ -230,5 +231,28 @@ class Clasificacion (CustomResource):
             raise http.HttpNotFound('no existe una ficha con el nombre %s' % ficha)
         return bundle
     
+class PublicClasificacion(CustomResource):
+    class Meta:
+        queryset = Clasificaciones.objects.all()
+        include_resource_uri=False
+        resource_name='clasificacion'
+        allowed_methods=['get']        
+        fields=['id','nombre']
+        authorization = DjangoAuthorization()
+        authentication = OAuth20Authentication()
+    
+    def get_object_list(self, request):
+        objects = super(PublicClasificacion, self).get_object_list(request)
+        if request.GET:
+            data = request.GET
+            if 'coleccion' in data and 'categoria' in data:
+                piezas = objects.filter(coleccion=data['coleccion']).filter(categoria=data['categoria'])
+                return piezas
+            if 'coleccion' in data:
+                return objects.filter(coleccion=data['coleccion'])            
+            if 'categoria' in data:
+                return objects.filter(categoria=data['categoria'])            
+        return objects
+        
 enabled_resources=[Pieza,Autor, Fotografia, Clasificacion]
-web_resources = [Exhibicion, Clasificacion]
+web_resources = [Exhibicion, PublicClasificacion]
