@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 from django.db import models
 from countries.models import Country
+from django.dispatch import receiver
 
-# Create your models here.
 class Perfil(models.Model):
     """
     Esta clase representa el modelo de los perfiles que se utilizar�n
@@ -26,6 +27,15 @@ class Perfil(models.Model):
     def __unicode__(self):
         return self.usuario.get_username()
     
+@receiver(post_save,sender = User)
+def create_profile(sender, **kwargs):
+    user = kwargs.get('instance')
+    if kwargs.get('created', False):
+        if not user.profile:
+            Perfil.objects.create(usuario=kwargs.get('instance'))
+    elif user:
+        user.perfil.save()
+        
 class Publicacion(models.Model):
     autor = models.ForeignKey(Perfil, related_name='publicaciones')
     fecha = models.DateField(auto_now=True, blank=True, null=True)

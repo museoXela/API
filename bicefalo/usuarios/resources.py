@@ -19,21 +19,67 @@ class Groups(CustomResource):
     
 class UserResource(CustomResource):
     fotografia = fields.CharField(null = True)
+    biografia = fields.CharField(null = True)
+    pais = fields.CharField(null=True)
+    filiacion = fields.CharField(null = True)
+    voluntario = fields.BooleanField(null = True)
+    
     class Meta:
         queryset = User.objects.all()
         resource_name = 'usuarios'
         fields = ['username','date_joined','first_name','last_name','is_staff']       
         detail_uri_name = 'username'
-        allowed_methods=['get','post','put']
+        allowed_methods=['get','post','put','patch']
         always_return_data = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
     
     def hydrate_fotografia(self, bundle):
-        bundle.obj.perfil.fotografia = bundle.data['fotografia']
-        bundle.obj.perfil.save()
+        if 'fotografia' in bundle.data:
+            bundle.obj.perfil.fotografia = bundle.data['fotografia']
         return bundle
-        
+    
+    def dehydrate_fotografia(self, bundle):
+        return unicode(bundle.obj.perfil.fotografia)
+    
+    def hydrate_filiacion(self, bundle):
+        if 'filiacion' in bundle.data:
+            bundle.obj.perfil.filiacionAcademica = bundle.data['filiacion']
+        return bundle
+    
+    def dehydrate_filiacion(self, bundle):
+        return bundle.obj.perfil.filiacionAcademica
+    
+    def hydrate_pais(self, bundle):
+        from countries.models import Country
+        from tastypie import http
+        if 'pais' in bundle.data:
+            try:
+                pais = Country.objects.get(iso=bundle.data['pais'])
+                bundle.obj.perfil.pais = pais
+            except :
+                raise http.HttpNotFound('No existe un pais con el iso %s' % bundle.data['pais'])
+        return bundle
+    
+    def dehydrate_pais(self, bundle):
+        return unicode(bundle.obj.perfil.pais)
+    
+    def hydrate_biografia(self, bundle):
+        if 'biografia' in bundle.data:
+            bundle.obj.perfil.biografia = bundle.data['biografia']
+        return bundle
+    
+    def dehydrate_biografia(self, bundle):
+        return unicode(bundle.obj.perfil.biografia)
+    
+    def hydrate_voluntario(self, bundle):
+        if 'voluntario' in bundle.data:
+            bundle.obj.perfil.voluntario = bundle.data['voluntario']
+        return bundle
+    
+    def dehydrate_voluntario(self, bundle):
+        return bundle.obj.perfil.voluntario
+    
     def login(self, request, **kwargs):
         from django.contrib.auth import authenticate, login      
         if request.method=='POST':

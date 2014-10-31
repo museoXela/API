@@ -34,8 +34,6 @@ class Pieza (CustomResource):
         } 
         
     def get_object_list(self, request):
-        import pdb 
-        pdb.set_trace()
         if request.GET:
             data = request.GET
             if 'coleccion' in data and 'categoria' in data:
@@ -100,17 +98,7 @@ class Exhibicion(Pieza):
     
     def dehydrate_fotografia(self, bundle):
         return bundle.obj.get_profile_image()
-    
-    def build_filters(self, filters=None):
-        if filters is None:
-            filters = {}       
-        orm_filters = super(Exhibicion, self).build_filters(filters)
-        if('categoria' in filters):
-            filters['c'] = filters['categoria']        
-        if('coleccion' in filters):
-            filters['clasificacion__coleccion__id'] = filters['coleccion']    
-        return orm_filters
-    
+        
     def get_investigaciones_ref(self, obj):
         from investigacion.resources import Investigacion
         from tastypie.utils import trailing_slash
@@ -210,7 +198,7 @@ class Clasificacion (CustomResource):
         always_return_data = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
-        filtering{'coleccion':ALL, 'categoria':ALL}
+        filtering={'coleccion':ALL, 'categoria':ALL}
         
     def hydrate_coleccion(self, bundle):
         from colecciones.models import Coleccion
