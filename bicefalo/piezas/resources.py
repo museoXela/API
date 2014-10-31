@@ -67,7 +67,7 @@ class Exhibicion(Pieza):
     
     fotografia = fields.CharField(null=True)
     pais= fields.CharField(null=True, attribute='pais')
-
+    clasificacion = fields.CharField(null=True, attribute='clasificacion')
     class Meta:
         queryset = Piezas.objects.filter(exhibicion=True)
         resource_name = 'exhibicion'
@@ -91,9 +91,9 @@ class Exhibicion(Pieza):
         bundle.data['descripcion'] = unicode(bundle.obj.descripcion)        
         bundle.data['investigaciones'] = self.get_investigaciones_ref(bundle.obj)
         return bundle
+    
     def dehydrate(self, bundle):
         bundle.data['categoria'] = bundle.obj.get_categoria()
-        bundle.data['clasificacion'] = bundle.obj.get_clasificacion()
         bundle.data['coleccion'] = bundle.obj.get_coleccion()
         return bundle
     
