@@ -40,7 +40,6 @@ INSTALLED_APPS = (
     'provider',
     'provider.oauth2',
     'tastypie',
-    'tastypie_swagger',
     'countries',
     'investigacion',
     'registro',
@@ -105,4 +104,3 @@ STATIC_URL = '/static/'
 
 # Security and ssl sessions
 #SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-TASTYPIE_SWAGGER_API_MODULE = 'bicefalo.urls.api'
