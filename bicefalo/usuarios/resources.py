@@ -18,32 +18,32 @@ class Groups(CustomResource):
         authentication = OAuth20Authentication()
     
 class UserResource(CustomResource):
-    fotografia = fields.CharField(null = True)
-    biografia = fields.CharField(null = True)
+    fotografia = fields.CharField(null=True)
+    biografia = fields.CharField(null=True)
     pais = fields.CharField(null=True)
-    filiacion = fields.CharField(null = True)
-    voluntario = fields.BooleanField(null = True)
+    filiacion = fields.CharField(null=True)
+    voluntario = fields.BooleanField(null=True)
     
     class Meta:
         queryset = User.objects.all()
         resource_name = 'usuarios'
         fields = ['username','date_joined','first_name','last_name','is_staff','email']       
         detail_uri_name = 'username'
-        allowed_methods=['get','post','put','patch']
+        allowed_methods=['get','put']
         always_return_data = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
     
     def hydrate_fotografia(self, bundle):
-        if 'fotografia' in bundle.data:
+        if 'fotografia' in bundle.data and bundle.obj.perfil:
             bundle.obj.perfil.fotografia = bundle.data['fotografia']
         return bundle
-    
+        
     def dehydrate_fotografia(self, bundle):
         return unicode(bundle.obj.perfil.fotografia)
     
     def hydrate_filiacion(self, bundle):
-        if 'filiacion' in bundle.data:
+        if 'filiacion' in bundle.data and bundle.obj.perfil:
             bundle.obj.perfil.filiacionAcademica = bundle.data['filiacion']
         return bundle
     
@@ -53,7 +53,7 @@ class UserResource(CustomResource):
     def hydrate_pais(self, bundle):
         from countries.models import Country
         from tastypie import http
-        if 'pais' in bundle.data:
+        if 'pais' in bundle.data and bundle.obj.perfil:
             try:
                 pais = Country.objects.get(iso=bundle.data['pais'])
                 bundle.obj.perfil.pais = pais
@@ -65,7 +65,7 @@ class UserResource(CustomResource):
         return unicode(bundle.obj.perfil.pais)
     
     def hydrate_biografia(self, bundle):
-        if 'biografia' in bundle.data:
+        if 'biografia' in bundle.data and bundle.obj.perfil:
             bundle.obj.perfil.biografia = bundle.data['biografia']
         return bundle
     
@@ -73,7 +73,7 @@ class UserResource(CustomResource):
         return unicode(bundle.obj.perfil.biografia)
     
     def hydrate_voluntario(self, bundle):
-        if 'voluntario' in bundle.data:
+        if 'voluntario' in bundle.data and bundle.obj.per:
             bundle.obj.perfil.voluntario = bundle.data['voluntario']
         return bundle
     
@@ -81,7 +81,8 @@ class UserResource(CustomResource):
         return bundle.obj.perfil.voluntario
     
     def login(self, request, **kwargs):
-        from django.contrib.auth import authenticate, login      
+        from django.contrib.auth import authenticate, login   
+        from tastypie import http   
         if request.method=='POST':
             data = self.deserialize(request, request.body, format=request.META.get('CONTENT_TYPE', 'application/json'))
             user = authenticate(username=data['username'], password=data['password'])
@@ -92,20 +93,29 @@ class UserResource(CustomResource):
                     bundle = self.full_dehydrate(bundle)                    
                     return self.create_response(request,bundle)
                 else:
-                    return self.create_response(request,{'error':'tu cuenta está deshabilitada'},response_class=HttpForbidden)
+                    return self.create_response(request,{'error':'tu cuenta está deshabilitada'},response_class=http.HttpForbidden)
             else:
                 return self.create_response(request,{'error':'revisa tus datos y vuelve a intentarlo'},
-                                            response_class=HttpBadRequest)
+                                            response_class=http.HttpBadRequest)
         else:
-            return self.create_response(request,{'error':'solo se admite el método POST'}, response_class=HttpMethodNotAllowed)
+            return self.create_response(request,{'error':'solo se admite el método POST'}, response_class=http.HttpMethodNotAllowed)
     
     def logout(self,request, **kwargs):
         from django.contrib.auth import logout
+        from tastypie import http
         if request.method=='POST':
             logout(request)
         else:
-            return self.create_response(request,{'error':'solo se admite el método POST'}, response_class=HttpMethodNotAllowed)
+            return self.create_response(request,{'error':'solo se admite el método POST'}, response_class=http.HttpMethodNotAllowed)
         return self.create_response(request,{'mensaje':'Has salido del sistema'})
+        
+    def create(self, request, **kwargs):
+        from tastypie import http
+        if request.method == 'POST':
+            data = self.deserialize(request, request.body, format=request.META.get('CONTENT_TYPE', 'application/json'))
+            user = User.objects.create_user(data['username'], data['email'],data['password'])
+            return self.create_response(request,{'mensaje':'Usuario creado con éxito'}, response_class=http.HttpCreated)
+        return self.create_response(request,{'error':'solo se admite el método POST'}, response_class=http.HttpMethodNotAllowed)
     
     def prepend_urls(self):
         from django.conf.urls import url
@@ -113,7 +123,9 @@ class UserResource(CustomResource):
             url(r'^usuarios/(?P<username>\w+)/$', self.wrap_view('dispatch_detail'), name='api_dispatch_detail'),
             url(r'^login/$', self.wrap_view('login'), name='login'),
             url(r'^logout/$', self.wrap_view('logout'), name='logout'),
+            url(r'^registrar/$', self.wrap_view('create'), name='create_user'),
             ]
+
 class Voluntario(CustomResource):
     username=fields.CharField(readonly=True, attribute='usuario')
     nombre=fields.CharField(null=True)

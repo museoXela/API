@@ -20,10 +20,10 @@ class Perfil(models.Model):
           
     usuario = models.OneToOneField(User, related_name='perfil')
     filiacionAcademica = models.CharField(blank=True, max_length=50)
-    pais = models.ForeignKey(Country,  null=True)
+    pais = models.ForeignKey(Country,  blank=True, null=True)
     fotografia = models.URLField(null=True, blank=True)
     biografia = models.TextField(blank = True)
-    voluntario = models.BooleanField(default=True)
+    voluntario = models.BooleanField(default=False)
     def __unicode__(self):
         return self.usuario.get_username()
     
@@ -31,9 +31,8 @@ class Perfil(models.Model):
 def create_profile(sender, **kwargs):
     user = kwargs.get('instance')
     if kwargs.get('created', False):
-        if not user.perfil:
-            Perfil.objects.create(usuario=kwargs.get('instance'))
-    elif user:
+        Perfil.objects.create(usuario=kwargs.get('instance'), pais=None)
+    elif user.perfil:
         user.perfil.save()
         
 class Publicacion(models.Model):
