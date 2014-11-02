@@ -24,7 +24,7 @@ class UserResource(CustomResource):
     pais = fields.CharField(null=True)
     filiacion = fields.CharField(null=True)
     voluntario = fields.BooleanField(null=True)
-    
+    fullName = fields.CharField(null=True, readonly=True)
     class Meta:
         queryset = User.objects.all()
         resource_name = 'usuarios'
@@ -35,6 +35,9 @@ class UserResource(CustomResource):
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
         filtering = {'username':ALL, 'is_active':ALL}
+        
+    def hydrate_fullName(self, bundle):
+        return bundle.obj.first_name +  ' ' + bundle.obj.last_name
     def hydrate_fotografia(self, bundle):
         if 'fotografia' in bundle.data and bundle.obj.perfil:
             bundle.obj.perfil.fotografia = bundle.data['fotografia']
@@ -63,7 +66,7 @@ class UserResource(CustomResource):
         return bundle
     
     def dehydrate_pais(self, bundle):
-        return unicode(bundle.obj.perfil.pais)
+        return unicode(bundle.obj.perfil.pais.iso)
     
     def hydrate_biografia(self, bundle):
         if 'biografia' in bundle.data and bundle.obj.perfil:
