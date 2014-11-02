@@ -80,7 +80,7 @@ class UserResource(CustomResource):
         return unicode(bundle.obj.perfil.biografia)
     
     def hydrate_voluntario(self, bundle):
-        if 'voluntario' in bundle.data and bundle.obj.per:
+        if 'voluntario' in bundle.data and bundle.obj.perfil:
             bundle.obj.perfil.voluntario = bundle.data['voluntario']
         return bundle
     
