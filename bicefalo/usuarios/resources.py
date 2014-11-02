@@ -6,6 +6,7 @@ from bicefalo.authentication import OAuth20Authentication
 from bicefalo.utils import CustomResource
 from tastypie.authorization import DjangoAuthorization
 from django.contrib.auth.models import User,Group
+from tastypie.resources import ALL
 from models import Perfil
 from tastypie import fields
 
@@ -27,13 +28,13 @@ class UserResource(CustomResource):
     class Meta:
         queryset = User.objects.all()
         resource_name = 'usuarios'
-        fields = ['username','date_joined','first_name','last_name','is_staff','email']       
+        fields = ['username','date_joined','first_name','last_name','is_staff','email','is_active']       
         detail_uri_name = 'username'
         allowed_methods=['get','put']
         always_return_data = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
-    
+        filtering = {'username':ALL, 'is_active':ALL}
     def hydrate_fotografia(self, bundle):
         if 'fotografia' in bundle.data and bundle.obj.perfil:
             bundle.obj.perfil.fotografia = bundle.data['fotografia']
@@ -112,8 +113,8 @@ class UserResource(CustomResource):
     def create(self, request, **kwargs):
         from tastypie import http
         if request.method == 'POST':
-            data = self.deserialize(request, request.body, format=request.META.get('CONTENT_TYPE', 'application/json'))
-            user = User.objects.create_user(data['username'], data['email'],data['password'])
+            data = self.deserialize(request, request.body, format='application/json')
+            User.objects.create_user(data['username'], data['email'], data['password'])
             return self.create_response(request,{'mensaje':'Usuario creado con éxito'}, response_class=http.HttpCreated)
         return self.create_response(request,{'error':'solo se admite el método POST'}, response_class=http.HttpMethodNotAllowed)
     
