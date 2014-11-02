@@ -65,8 +65,11 @@ class UserResource(CustomResource):
                 raise http.HttpNotFound('No existe un pais con el iso %s' % bundle.data['pais'])
         return bundle
     
-    def dehydrate_pais(self, bundle):
-        return unicode(bundle.obj.perfil.pais.iso)
+    def dehydrate_pais(self, bundle):   
+        if bundle.obj.perfil:
+            if bundle.obj.perfil.pais:     
+                return unicode(bundle.obj.perfil.pais.iso)
+        return ""
     
     def hydrate_biografia(self, bundle):
         if 'biografia' in bundle.data and bundle.obj.perfil:
