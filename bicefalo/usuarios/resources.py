@@ -36,8 +36,9 @@ class UserResource(CustomResource):
         authentication = OAuth20Authentication()
         filtering = {'username':ALL, 'is_active':ALL}
         
-    def hydrate_fullName(self, bundle):
+    def dehydrate_fullName(self, bundle):
         return bundle.obj.first_name +  ' ' + bundle.obj.last_name
+    
     def hydrate_fotografia(self, bundle):
         if 'fotografia' in bundle.data and bundle.obj.perfil:
             bundle.obj.perfil.fotografia = bundle.data['fotografia']
