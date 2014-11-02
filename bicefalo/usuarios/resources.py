@@ -91,7 +91,7 @@ class UserResource(CustomResource):
                     login(request,user)
                     bundle = self.build_bundle(obj=user, request=request)
                     bundle = self.full_dehydrate(bundle)                    
-                    return self.create_response(request,bundle)
+                    return self.create_response(request,bundle, response_class=http.HttpCreated)
                 else:
                     return self.create_response(request,{'error':'tu cuenta está deshabilitada'},response_class=http.HttpForbidden)
             else:

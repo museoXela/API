@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from bicefalo.authentication import OAuth20Authentication
 from bicefalo.utils import CustomResource
 from tastypie.authorization import DjangoAuthorization
+from tastypie.resources import ALL
 from tastypie import fields
 from models import Traslado, Caja as Cajas, Sala, Vitrina as Vitrinas
 
@@ -67,7 +68,7 @@ class Caja(CustomResource):
         allowed_methods=['get','post','put']
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
-
+        filtering = {'codigo':ALL,}
 class Sala(CustomResource):
     class Meta:
         queryset= Sala.objects.all()
@@ -75,13 +76,15 @@ class Sala(CustomResource):
         allowed_methods=['get','post','put']
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
+        filtering = {'nombre':ALL,}
         
 class Vitrina(CustomResource):
+    sala = fields.CharField(attribute='sala', null=True)
     class Meta:
         queryset= Vitrinas.objects.all()
         resource_name= 'vitrina'
         allowed_methods=['get','post','put']       
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
-        
+        filtering = {'numero':ALL, 'sala':ALL,}
 enabled_resources=[Traslado,Caja, Sala, Vitrina]

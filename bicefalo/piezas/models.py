@@ -5,7 +5,7 @@ from countries.models import Country
 from django.template.defaultfilters import slugify
 
 class Autor(models.Model):
-    pais = models.ForeignKey(Country, related_name='autores')
+    pais = models.ForeignKey(Country, blank=True, null=True, related_name='autores')
     nombre = models.CharField(max_length=50)
     apellido = models.CharField(max_length=50)
     

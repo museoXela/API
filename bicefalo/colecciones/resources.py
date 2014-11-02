@@ -17,7 +17,7 @@ class Categoria(CustomResource):
         
     def get_object_list(self, request):
         if request.GET:
-            id = request.GET['coleccion']
+            id = request.GET.get('coleccion')
             if id:
                 return Colecciones.objects.get(id=id).categorias.distinct()
         return super(Categoria, self).get_object_list(request)

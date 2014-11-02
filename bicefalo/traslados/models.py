@@ -31,7 +31,7 @@ class Caja(models.Model):
 class Sala(models.Model):
 	nombre=models.CharField(unique=True,null=True,blank=True,max_length=50)
 	descripcion=models.TextField(null=True,blank=True,max_length=50)
-	fotografia=models.ImageField(upload_to='salas',null=True,blank=True, default='salas/room.jpg')
+	fotografia=models.URLField(null=True,blank=True)
 	class Meta:
 		db_table='Sala'
 		verbose_name='sala'

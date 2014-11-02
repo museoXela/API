@@ -15,6 +15,7 @@ from django.conf.urls import url
 
 class Pieza (CustomResource):
     exclude_master = ['altura','ancho', 'diametro', 'grosor','largo', 'maestra']
+    clasificacion = fields.CharField(null=True, attribute='clasificacion')
     class Meta:
         queryset = Piezas.objects.all()
         resource_name='piezas'
@@ -23,6 +24,7 @@ class Pieza (CustomResource):
         always_return_data = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
+        ordering = ['fechaIngreso','clasificacion']
         filtering = {
                      'fechaIngreso':ALL,
                      'procedencia':ALL,
@@ -30,7 +32,8 @@ class Pieza (CustomResource):
                      'maestra':ALL,
                      'exhibicion':ALL,
                      'fechamiento':ALL,
-                     'clasificacion':ALL,                     
+                     'clasificacion':ALL,   
+                     'nombre':ALL,                  
         } 
         
     def get_object_list(self, request):
