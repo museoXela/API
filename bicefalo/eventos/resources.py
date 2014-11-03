@@ -7,7 +7,7 @@ from models import Eventos
 import datetime
 
 class EventosResource(CustomResource):
-    sala = fields.CharField(attribute='sala')
+    sala = fields.IntegerField(attribute='sala_id')
     fotoSala = fields.CharField(null=True, readonly=True)
     usuario = fields.CharField(attribute='usuario')
     class Meta:
@@ -20,7 +20,10 @@ class EventosResource(CustomResource):
         
     def dehydrate_fotoSala(self, bundle):
         return unicode(bundle.obj.sala.fotografia)
-        
+    
+    def dehydrate_sala(self, bundle):
+        return bundle.obj.sala_id
+    
     def hydrate_sala(self, bundle):
         from traslados.models import Sala
         sala = bundle.data['sala']
