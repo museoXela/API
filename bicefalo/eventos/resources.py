@@ -8,7 +8,7 @@ import datetime
 
 class EventosResource(CustomResource):
     sala = fields.CharField(attribute='sala')
-    fotoSala = fields.CharField(null=True)
+    fotoSala = fields.CharField(null=True, readonly=True)
     usuario = fields.CharField(attribute='usuario')
     class Meta:
         queryset=  Eventos.objects.all()
@@ -25,7 +25,7 @@ class EventosResource(CustomResource):
         from traslados.models import Sala
         sala = bundle.data['sala']
         if sala:
-            bundle.data['sala'] = Sala.objects.get(nombre=sala)
+            bundle.data['sala'] = Sala.objects.get(id=sala)
         return bundle
     
     def hydrate_usuario(self, bundle):
