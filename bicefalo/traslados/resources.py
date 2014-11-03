@@ -80,7 +80,7 @@ class Sala(CustomResource):
         filtering = {'nombre':ALL,}
         
 class Vitrina(CustomResource):
-    sala = fields.CharField(attribute='sala', null=True)
+    sala = fields.IntegerField(attribute='sala_id')
     class Meta:
         queryset= Vitrinas.objects.all()
         resource_name= 'vitrina'
@@ -89,7 +89,4 @@ class Vitrina(CustomResource):
         authentication = OAuth20Authentication()
         filtering = {'numero':ALL, 'sala':ALL,}
         
-    def hydrate_sala(self, bundle):
-        bundle.data['sala'] = Salas.objects.get(id = bundle.data['sala'])
-        return bundle
 enabled_resources=[Traslado,Caja, Sala, Vitrina]
