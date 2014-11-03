@@ -6,7 +6,7 @@ from bicefalo.utils import CustomResource
 from tastypie.authorization import DjangoAuthorization
 from tastypie.resources import ALL
 from tastypie import fields
-from models import Traslado, Caja as Cajas, Sala, Vitrina as Vitrinas
+from models import Traslado, Caja as Cajas, Sala as  Salas, Vitrina as Vitrinas
 
 class Traslado(CustomResource):
     responsable = fields.CharField(attribute='responsable')
@@ -71,7 +71,7 @@ class Caja(CustomResource):
         filtering = {'codigo':ALL,}
 class Sala(CustomResource):
     class Meta:
-        queryset= Sala.objects.all()
+        queryset= Salas.objects.all()
         resource_name= 'salas'   
         allowed_methods=['get','post','put']
         authorization = DjangoAuthorization()
@@ -87,4 +87,8 @@ class Vitrina(CustomResource):
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
         filtering = {'numero':ALL, 'sala':ALL,}
+        
+    def hydrate_sala(self, bundle):
+        bundle.data['sala'] = Salas.objects.get(id = bundle.data['sala'])
+        return bundle
 enabled_resources=[Traslado,Caja, Sala, Vitrina]
