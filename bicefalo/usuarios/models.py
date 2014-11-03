@@ -27,6 +27,12 @@ class Perfil(models.Model):
     def __unicode__(self):
         return self.usuario.get_username()
     
+    def get_statistics(self):
+        usuarios = {}
+        usuarios['registrados'] = User.objects.count()
+        usuarios['voluntarios'] = Perfil.objects.filter(voluntario=True).count()
+        return usuarios
+    
 @receiver(post_save,sender = User)
 def create_profile(sender, **kwargs):
     user = kwargs.get('instance')

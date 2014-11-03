@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 from bicefalo.authentication import OAuth20Authentication
 from bicefalo.utils import CustomResource
 from tastypie.authorization import DjangoAuthorization
-from django.contrib.auth.models import User,Group
+from django.contrib.auth.models import User as Users,Group
 from django.conf.urls import url
 from tastypie.resources import ALL
 from models import Perfil
@@ -48,7 +48,7 @@ class UserResource(CustomResource):
     voluntario = fields.BooleanField(null=True)
     fullName = fields.CharField(null=True, readonly=True)
     class Meta:
-        queryset = User.objects.all()
+        queryset = Users.objects.all()
         resource_name = 'usuarios'
         fields = ['username','date_joined','first_name','last_name','is_staff','email','is_active']       
         detail_uri_name = 'username'
@@ -146,7 +146,21 @@ class UserResource(CustomResource):
             User.objects.create_user(data['username'], data['email'], data['password'])
             return self.create_response(request,{'mensaje':'Usuario creado con éxito'}, response_class=http.HttpCreated)
         return self.create_response(request,{'error':'solo se admite el método POST'}, response_class=http.HttpMethodNotAllowed)
-    
+    def get_resumen(self, request, **kwargs):
+        from tastypie import http
+        from usuarios.models import Perfil as perfil
+        from piezas.models import Pieza as Piezas
+        from eventos.models import Eventos
+        from investigacion.models import Investigacion
+        dict = {}
+        if request.method == 'GET':           
+            dict['usuarios'] = perfil().get_statistics()
+            dict['piezas'] = Piezas().get_statistcs()
+            dict['eventos'] = Eventos().get_statistics()
+            dict['investigaciones'] = Investigacion().get_statistics()
+            return self.create_response(request,dict)
+        return self.create_response(request, {'error':'solo se admite el método GET'}, response_class=http.HttpMethodNotAllowed)
+            
     def prepend_urls(self):
         from django.conf.urls import url
         return [
@@ -154,6 +168,7 @@ class UserResource(CustomResource):
             url(r'^login/$', self.wrap_view('login'), name='login'),
             url(r'^logout/$', self.wrap_view('logout'), name='logout'),
             url(r'^registrar/$', self.wrap_view('create'), name='create_user'),
+            url(r'^resumen/$', self.wrap_view('get_resumen'), name='create_user'),
             ]
 
 class Voluntario(CustomResource):

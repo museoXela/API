@@ -21,7 +21,12 @@ class Investigacion(models.Model):
         
     def __unicode__(self):
         return unicode(self.editor) + '-' + unicode(self.titulo)   
-
+    def get_statistics(self):
+        dict = {}
+        dict['investigaciones']=Investigacion.objects.count()
+        dict['publicadas']=Investigacion.objects.filter(publicado=True).count()
+        dict['borradores']=Investigacion.objects.filter(publicado=False).count()
+        return dict
 class LinkInvestigacion(models.Model):    
     investigacion = models.ForeignKey(Investigacion, related_name='links')
     link = models.URLField()

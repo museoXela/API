@@ -65,7 +65,15 @@ class Pieza(models.Model):
         return unicode(self.clasificacion)
     def __unicode__(self):
         return self.codigo
-
+    
+    def get_statistcs(self):
+        colecciones = {}
+        colecciones['colecciones'] = Coleccion.objects.count()
+        colecciones['clasificaciones'] = Coleccion.objects.count()
+        colecciones['categorias'] = Categoria.objects.count()
+        colecciones['piezas'] = Pieza.objects.count()
+        return colecciones
+    
 class Fotografia(models.Model):
     from operaciones.models import Mantenimiento
     mantenimiento = models.ForeignKey(Mantenimiento, blank=True, null=True, related_name='fotografias')

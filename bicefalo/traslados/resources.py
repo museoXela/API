@@ -69,6 +69,7 @@ class Caja(CustomResource):
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
         filtering = {'codigo':ALL,}
+        
 class Sala(CustomResource):
     class Meta:
         queryset= Salas.objects.all()
