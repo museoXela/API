@@ -69,7 +69,7 @@ class Pieza(models.Model):
     def get_statistcs(self):
         colecciones = {}
         colecciones['colecciones'] = Coleccion.objects.count()
-        colecciones['clasificaciones'] = Coleccion.objects.count()
+        colecciones['clasificaciones'] = Clasificacion.objects.count()
         colecciones['categorias'] = Categoria.objects.count()
         colecciones['piezas'] = Pieza.objects.count()
         return colecciones
