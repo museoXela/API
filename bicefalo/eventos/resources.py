@@ -7,7 +7,7 @@ from models import Eventos
 import datetime
 
 class EventosResource(CustomResource):
-    sala = fields.IntegerField(attribute='sala')
+    sala = fields.CharField(attribute='sala')
     fotoSala = fields.CharField(null=True, readonly=True)
     usuario = fields.CharField(attribute='usuario')
     class Meta:
