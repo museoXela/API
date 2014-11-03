@@ -27,7 +27,7 @@ class LinkResource(CustomResource):
 class PrivateInvestigacion(CustomResource):
     links = fields.ToManyField(LinkResource, attribute='links')
     editor = fields.CharField(attribute='editor')
-    autor = fields.IntegerField()
+    autor = fields.IntegerField(attribute='autor_id')
     piezas = fields.ToManyField(CustomPieza, attribute='piezas')
     
     class Meta:
@@ -48,14 +48,6 @@ class PrivateInvestigacion(CustomResource):
     
     def dehydrate_autor(self, bundle):
         return bundle.obj.autor.id
-    
-    def hydrate_autor(self, bundle):
-        from piezas.models import Autor
-        autor = bundle.data['autor']
-        if autor:
-            autor =Autor.objects.get(id=autor)
-            bundle.data['autor'] = autor
-        return bundle
     
     def get_links(self, request, obj):        
         res= LinkResource()
