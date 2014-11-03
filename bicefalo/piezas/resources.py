@@ -15,7 +15,9 @@ from django.conf.urls import url
 
 class Pieza (CustomResource):
     exclude_master = ['altura','ancho', 'diametro', 'grosor','largo', 'maestra']
-    clasificacion = fields.CharField(null=True, attribute='clasificacion')
+    clasificacion = fields.CharField(null=True, attribute='clasificacion_id')
+    autor = fields.CharField(null=True, attribute='autor_id')
+    responsableRegistro = fields.CharField(null=True, attribute='responsableRegistro')
     class Meta:
         queryset = Piezas.objects.all()
         resource_name='piezas'
