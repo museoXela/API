@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from bicefalo.authentication import OAuth20Authentication
 from bicefalo.utils import CustomResource
 from tastypie.authorization import DjangoAuthorization
+from tastypie.resources import ALL
 from tastypie import fields
 from models import Eventos
 import datetime
@@ -17,7 +18,7 @@ class EventosResource(CustomResource):
         always_return_data = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
-        
+        filtering={'nombre':ALL, 'fecha':ALL,}
     def dehydrate_fotoSala(self, bundle):
         return unicode(bundle.obj.sala.fotografia)
     
