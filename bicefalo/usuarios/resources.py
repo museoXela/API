@@ -6,6 +6,7 @@ from bicefalo.authentication import OAuth20Authentication
 from bicefalo.utils import CustomResource
 from tastypie.authorization import DjangoAuthorization
 from django.contrib.auth.models import User,Group
+from django.conf.urls import url
 from tastypie.resources import ALL
 from models import Perfil
 from tastypie import fields
@@ -17,7 +18,28 @@ class Groups(CustomResource):
         allowed_methods=['get']
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
-    
+    def registrar_usuario(self, request, **kwargs):
+        from django.contrib.auth import authenticate, login
+        from tastypie import http
+        if request.method == 'POST':
+            data = self.deserialize(request, request.body, format=request.META.get('CONTENT_TYPE', 'application/json'))
+            group = data.get('idGrupo')
+            username = data.get('username')
+            if group and username:
+                group = Group.objects.get(id=group)
+                user = User.objects.get_by_natural_key(username)
+                group.user_set.add(user)
+                group.save()
+                return self.create_response(request,{'mensaje':'Se ha agregado %s al grupo %s' %(user, group)},response_class=http.HttpCreated)
+            else:
+                return self.create_response(request, {'error':'Hacen falta datos, recibí usuario=%s y grupo=%s'%(group, username)}, response_class=http.HttpBadRequest)
+        return self.create_response(request, {'error':'Solo se admite el método POST'}, response_class=http.HttpMethodNotAllowed)
+            
+    def prepend_urls(self):
+        return [
+            url(r'^grupos/(?P<pk>\d+)/$', self.wrap_view('dispatch_detail'), name='api_dispatch_detail'),
+            url(r'^grupos/registrar/$', self.wrap_view('registrar_usuario'), name='group_add_user'),
+            ]
 class UserResource(CustomResource):
     fotografia = fields.CharField(null=True)
     biografia = fields.CharField(null=True)

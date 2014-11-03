@@ -171,7 +171,11 @@ class Autor (CustomResource):
         always_return_data = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
-    
+        filtering={'nombre':ALL, 'apellido':ALL, 'pais':ALL}
+    def dehydrate_pais(self, bundle):
+        if bundle.obj.pais:
+            return bundle.obj.pais.iso
+        return ""
     def hydrate_pais(self, bundle):
         from countries.models import Country
         from tastypie import http
