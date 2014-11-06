@@ -24,8 +24,15 @@ class LinkResource(CustomResource):
         fields = ['link']
         include_resource_uri = False
         
+class PrivateLinkResource(CustomResource):
+    class Meta:
+        queryset = LinkInvestigacion.objects.all()
+        resource_name = 'linksInvestigacion'
+        fields = ['link']
+        include_resource_uri = False
+        
 class PrivateInvestigacion(CustomResource):
-    links = fields.ToManyField(LinkResource, attribute='links')
+    links = fields.ToManyField(PrivateLinkResource, attribute='links', full=True)
     editor = fields.CharField(attribute='editor')
     autor = fields.IntegerField(attribute='autor_id')
     piezas = fields.ToManyField(CustomPieza, attribute='piezas')
