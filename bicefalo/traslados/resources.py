@@ -10,9 +10,9 @@ from models import Traslado, Caja as Cajas, Sala as  Salas, Vitrina as Vitrinas
 
 class Traslado(CustomResource):
     responsable = fields.CharField(attribute='responsable')
-    caja = fields.CharField(attribute='caja', null=True, blank=True)
+    caja = fields.IntegerField(attribute='caja_id', null=True, blank=True)
     pieza = fields.CharField(attribute='pieza')
-    vitrina = fields.CharField(attribute='vitrina', null=True, blank=True)
+    vitrina = fields.IntegerField(attribute='vitrina_id', null=True, blank=True)
 
     class Meta:
         queryset= Traslado.objects.all()
@@ -20,7 +20,15 @@ class Traslado(CustomResource):
         allowed_methods=['get','post','put']
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
-
+        
+    def hydrate_pieza(self, bundle):
+        from piezas.models import Pieza
+        pieza = bundle.data['pieza']
+        if pieza:
+            pieza = Pieza.objects.get(codigo=pieza)
+            bundle.data['pieza'] = pieza
+        return bundle
+    
     def hydrate_responsable(self, bundle):
         from django.contrib.auth.models import User
         from usuarios.models import Perfil
@@ -36,9 +44,9 @@ class Traslado(CustomResource):
         caja = bundle.data['caja']
         if caja:
             try:
-                caja = Cajas.objects.get(id=vitrina)
+                caja = Cajas.objects.get(id=caja)
                 if caja:
-                    bundle.data['vitrina']=vitrina
+                    bundle.data['caja']=caja
                     return bundle
                 else:
                     raise http.HttpBadRequest('Traslado debe degfinir una caja o una vitrina')
