@@ -13,14 +13,14 @@ class Traslado(CustomResource):
     caja = fields.CharField(attribute='caja', null=True, blank=True)
     pieza = fields.CharField(attribute='pieza')
     vitrina = fields.CharField(attribute='vitrina', null=True, blank=True)
-    
+
     class Meta:
         queryset= Traslado.objects.all()
         resource_name= 'traslados'
         allowed_methods=['get','post','put']
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
-        
+
     def hydrate_responsable(self, bundle):
         from django.contrib.auth.models import User
         from usuarios.models import Perfil
@@ -29,7 +29,7 @@ class Traslado(CustomResource):
             usuario = User.objects.get(username=usuario).perfil
             bundle.data['responsable'] = usuario
         return bundle
-    
+
     def hydrate_caja(self, bundle):
         from tastypie import http
         from django.db.models import exceptions
@@ -44,7 +44,7 @@ class Traslado(CustomResource):
                     raise http.HttpBadRequest('Traslado debe degfinir una caja o una vitrina')
             except exceptions.ObjectDoesNotExist:
                 raise http.HttpNotFound('no existe una vitrina con ese número de registro')
-    
+
     def hydrate_vitrina(self, bundle):
         from tastypie import http
         from django.db.models import exceptions
@@ -59,8 +59,8 @@ class Traslado(CustomResource):
                     raise http.HttpBadRequest('Traslado debe degfinir una caja o una vitrina')
             except exceptions.ObjectDoesNotExist:
                 raise http.HttpNotFound('no existe una vitrina con ese número de registro')
-            
-            
+
+
 class Caja(CustomResource):
     class Meta:
         queryset= Cajas.objects.all()
@@ -69,24 +69,24 @@ class Caja(CustomResource):
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
         filtering = {'codigo':ALL,}
-        
+
 class Sala(CustomResource):
     class Meta:
         queryset= Salas.objects.all()
-        resource_name= 'salas'   
+        resource_name= 'salas'
         allowed_methods=['get','post','put']
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
-        filtering = {'nombre':ALL,}
-        
+        filtering = {'nombre':ALL,'id':ALL}
+
 class Vitrina(CustomResource):
     sala = fields.IntegerField(attribute='sala_id')
     class Meta:
         queryset= Vitrinas.objects.all()
         resource_name= 'vitrina'
-        allowed_methods=['get','post','put']       
+        allowed_methods=['get','post','put']
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
         filtering = {'numero':ALL, 'sala':ALL,}
-        
+
 enabled_resources=[Traslado,Caja, Sala, Vitrina]
