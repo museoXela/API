@@ -34,7 +34,7 @@ class Groups(CustomResource):
             else:
                 return self.create_response(request, {'error':'Hacen falta datos, recibí usuario=%s y grupo=%s'%(group, username)}, response_class=http.HttpBadRequest)
         return self.create_response(request, {'error':'Solo se admite el método POST'}, response_class=http.HttpMethodNotAllowed)
-            
+
     def prepend_urls(self):
         return [
             url(r'^grupos/(?P<pk>\d+)/$', self.wrap_view('dispatch_detail'), name='api_dispatch_detail'),
@@ -50,33 +50,33 @@ class UserResource(CustomResource):
     class Meta:
         queryset = Users.objects.all()
         resource_name = 'usuarios'
-        fields = ['username','date_joined','first_name','last_name','is_staff','email','is_active']       
+        fields = ['username','date_joined','first_name','last_name','is_staff','email','is_active']
         detail_uri_name = 'username'
         allowed_methods=['get','put']
         always_return_data = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
         filtering = {'username':ALL, 'is_active':ALL}
-        
+
     def dehydrate_fullName(self, bundle):
         return bundle.obj.first_name +  ' ' + bundle.obj.last_name
-    
+
     def hydrate_fotografia(self, bundle):
         if 'fotografia' in bundle.data and bundle.obj.perfil:
             bundle.obj.perfil.fotografia = bundle.data['fotografia']
         return bundle
-        
+
     def dehydrate_fotografia(self, bundle):
         return unicode(bundle.obj.perfil.fotografia)
-    
+
     def hydrate_filiacion(self, bundle):
         if 'filiacion' in bundle.data and bundle.obj.perfil:
             bundle.obj.perfil.filiacionAcademica = bundle.data['filiacion']
         return bundle
-    
+
     def dehydrate_filiacion(self, bundle):
         return bundle.obj.perfil.filiacionAcademica
-    
+
     def hydrate_pais(self, bundle):
         from countries.models import Country
         from tastypie import http
@@ -87,32 +87,32 @@ class UserResource(CustomResource):
             except :
                 raise http.HttpNotFound('No existe un pais con el iso %s' % bundle.data['pais'])
         return bundle
-    
-    def dehydrate_pais(self, bundle):   
+
+    def dehydrate_pais(self, bundle):
         if bundle.obj.perfil:
-            if bundle.obj.perfil.pais:     
+            if bundle.obj.perfil.pais:
                 return unicode(bundle.obj.perfil.pais.iso)
         return ""
-    
+
     def hydrate_biografia(self, bundle):
         if 'biografia' in bundle.data and bundle.obj.perfil:
             bundle.obj.perfil.biografia = bundle.data['biografia']
         return bundle
-    
+
     def dehydrate_biografia(self, bundle):
         return unicode(bundle.obj.perfil.biografia)
-    
+
     def hydrate_voluntario(self, bundle):
         if 'voluntario' in bundle.data and bundle.obj.perfil:
             bundle.obj.perfil.voluntario = bundle.data['voluntario']
         return bundle
-    
+
     def dehydrate_voluntario(self, bundle):
         return bundle.obj.perfil.voluntario
-    
+
     def login(self, request, **kwargs):
-        from django.contrib.auth import authenticate, login   
-        from tastypie import http   
+        from django.contrib.auth import authenticate, login
+        from tastypie import http
         if request.method=='POST':
             data = self.deserialize(request, request.body, format=request.META.get('CONTENT_TYPE', 'application/json'))
             user = authenticate(username=data['username'], password=data['password'])
@@ -120,7 +120,7 @@ class UserResource(CustomResource):
                 if user.is_active:
                     login(request,user)
                     bundle = self.build_bundle(obj=user, request=request)
-                    bundle = self.full_dehydrate(bundle)                    
+                    bundle = self.full_dehydrate(bundle)
                     return self.create_response(request,bundle, response_class=http.HttpCreated)
                 else:
                     return self.create_response(request,{'error':'tu cuenta está deshabilitada'},response_class=http.HttpForbidden)
@@ -129,7 +129,7 @@ class UserResource(CustomResource):
                                             response_class=http.HttpBadRequest)
         else:
             return self.create_response(request,{'error':'solo se admite el método POST'}, response_class=http.HttpMethodNotAllowed)
-    
+
     def logout(self,request, **kwargs):
         from django.contrib.auth import logout
         from tastypie import http
@@ -138,12 +138,12 @@ class UserResource(CustomResource):
         else:
             return self.create_response(request,{'error':'solo se admite el método POST'}, response_class=http.HttpMethodNotAllowed)
         return self.create_response(request,{'mensaje':'Has salido del sistema'})
-        
+
     def create(self, request, **kwargs):
         from tastypie import http
         if request.method == 'POST':
             data = self.deserialize(request, request.body, format='application/json')
-            User.objects.create_user(data['username'], data['email'], data['password'])
+            Users.objects.create_user(data['username'], data['email'], data['password'])
             return self.create_response(request,{'mensaje':'Usuario creado con éxito'}, response_class=http.HttpCreated)
         return self.create_response(request,{'error':'solo se admite el método POST'}, response_class=http.HttpMethodNotAllowed)
     def get_resumen(self, request, **kwargs):
@@ -153,14 +153,14 @@ class UserResource(CustomResource):
         from eventos.models import Eventos
         from investigacion.models import Investigacion
         dict = {}
-        if request.method == 'GET':           
+        if request.method == 'GET':
             dict['usuarios'] = perfil().get_statistics()
             dict['piezas'] = Piezas().get_statistcs()
             dict['eventos'] = Eventos().get_statistics()
             dict['investigaciones'] = Investigacion().get_statistics()
             return self.create_response(request,dict)
         return self.create_response(request, {'error':'solo se admite el método GET'}, response_class=http.HttpMethodNotAllowed)
-            
+
     def prepend_urls(self):
         from django.conf.urls import url
         return [
@@ -183,16 +183,16 @@ class Voluntario(CustomResource):
         fields=['id','biografia', 'fotografia']
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
-    
+
     def dehydrate_nombre(self, bundle):
         return unicode(bundle.obj.usuario.first_name)
-    
+
     def dehydrate_apellido(self, bundle):
-        return unicode(bundle.obj.usuario.last_name)    
-    
+        return unicode(bundle.obj.usuario.last_name)
+
     def dehydrate_investigaciones(self, bundle):
         return self.get_investigaciones(bundle.obj, bundle.request)
-        
+
     def get_investigaciones(self, obj, request):
         from investigacion.resources import CustomInvestigacion
         list = obj.investigaciones.order_by('-fecha')[:3]
@@ -203,6 +203,6 @@ class Voluntario(CustomResource):
             bundle = res.full_dehydrate(bundle)
             objects.append(bundle)
         return objects
-    
+
 enabled_resources=[UserResource, Groups]
 web_resources=[Voluntario]
