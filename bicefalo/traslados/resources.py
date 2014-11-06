@@ -20,7 +20,7 @@ class Traslado(CustomResource):
         allowed_methods=['get','post','put']
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
-        filtering = {'pieza':ALL}
+        filtering = {'pieza':ALL, 'caja':ALL, 'vitrina':ALL, 'responsable':ALL}
         
     def hydrate_pieza(self, bundle):
         from piezas.models import Pieza
