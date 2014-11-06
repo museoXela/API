@@ -15,6 +15,8 @@ class CustomPieza(CustomResource):
         queryset = Pieza.objects.all()
         resource_name='custom_pieza'
         fields=['codigo']
+        authorization = DjangoAuthorization()
+        authentication = OAuth20Authentication()
         include_resource_uri=False
         
 class LinkResource(CustomResource):
@@ -28,7 +30,6 @@ class PrivateLinkResource(CustomResource):
     class Meta:
         queryset = LinkInvestigacion.objects.all()
         resource_name = 'linksInvestigacion'
-        fields = ['link']
         include_resource_uri = False
         
 class PrivateInvestigacion(CustomResource):
