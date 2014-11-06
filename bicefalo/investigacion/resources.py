@@ -31,7 +31,7 @@ class LinkResource(CustomResource):
 class PrivateLinkResource(CustomResource):
     class Meta:
         queryset = LinkInvestigacion.objects.all()
-        resource_name = 'linksInvestigacion'
+        resource_name = 'links'
         include_resource_uri = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
@@ -70,9 +70,6 @@ class PrivateInvestigacion(CustomResource):
             bundle = res.full_dehydrate(bundle)
             objects.append(bundle)
         return objects
-        
-    def dehydrate_links(self, bundle):
-        return self.get_links(bundle.request, bundle.obj)
     
     def get_piezas(self, request, obj):
         res = CustomPieza()
@@ -184,5 +181,5 @@ class CustomInvestigacion(CustomResource):
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
 
-enabled_resources=[PrivateInvestigacion]
+enabled_resources=[PrivateInvestigacion, PrivateLinkResource]
 web_resources=[Investigacion]
