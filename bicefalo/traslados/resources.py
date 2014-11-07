@@ -41,7 +41,7 @@ class Traslado(CustomResource):
 
     def hydrate_caja(self, bundle):
         from tastypie import http
-        caja = bundle.data['caja']
+        caja = bundle.data.get('caja', None)
         if caja:
             caja = Cajas.objects.get(id=caja)
             if caja:
@@ -53,7 +53,7 @@ class Traslado(CustomResource):
 
     def hydrate_vitrina(self, bundle):
         from tastypie import http
-        vitrina = bundle.data['vitrina']
+        vitrina = bundle.data.get('vitrina', None)
         if vitrina:
             vitrina = Vitrinas.objects.get(id=vitrina)
             if vitrina:
