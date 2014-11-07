@@ -60,7 +60,7 @@ class Traslado(CustomResource):
                 bundle.data['vitrina']=vitrina
                 return bundle
             else:
-                raise http.HttpBadRequest('Traslado debe degfinir una caja o una vitrina')
+                raise http.HttpBadRequest('Traslado debe definir una caja o una vitrina')
         return bundle
 
 

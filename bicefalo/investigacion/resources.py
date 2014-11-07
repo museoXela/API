@@ -28,7 +28,8 @@ class LinkResource(CustomResource):
         authentication = OAuth20Authentication()
         include_resource_uri = False
         
-class PrivateLinkResource(CustomResource):
+class PrivateLinkResource(CustomResource):    
+    investigacion = fields.RelatedField('PrivateInvestigacion', 'investigacion', related_name='investigacion')
     class Meta:
         queryset = LinkInvestigacion.objects.all()
         resource_name = 'links'
@@ -37,10 +38,11 @@ class PrivateLinkResource(CustomResource):
         authentication = OAuth20Authentication()
         
 class PrivateInvestigacion(CustomResource):
-    links = fields.ToManyField(PrivateLinkResource, attribute='links', full=True)
+    links = fields.ToManyField(PrivateLinkResource, 'links', related_name='links', full=True)
     editor = fields.CharField(attribute='editor')
     autor = fields.IntegerField(attribute='autor_id')
     piezas = fields.ToManyField(CustomPieza, attribute='piezas')
+    always_return_data=True
     
     class Meta:
         queryset = Investigaciones.objects.all()
