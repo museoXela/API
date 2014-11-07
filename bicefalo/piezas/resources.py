@@ -35,7 +35,8 @@ class Pieza (CustomResource):
                      'exhibicion':ALL,
                      'fechamiento':ALL,
                      'clasificacion':ALL,   
-                     'nombre':ALL,                  
+                     'nombre':ALL,
+                     'codigo':ALL,                  
         } 
         
     def get_object_list(self, request):

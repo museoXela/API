@@ -49,6 +49,7 @@ class Traslado(CustomResource):
                 return bundle
             else:
                 raise http.HttpBadRequest('Traslado debe degfinir una caja o una vitrina')
+        return bundle
 
     def hydrate_vitrina(self, bundle):
         from tastypie import http
@@ -64,6 +65,7 @@ class Traslado(CustomResource):
                     raise http.HttpBadRequest('Traslado debe degfinir una caja o una vitrina')
             except exceptions.ObjectDoesNotExist:
                 raise http.HttpNotFound('no existe una vitrina con ese número de registro')
+        return bundle
 
 
 class Caja(CustomResource):
