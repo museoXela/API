@@ -36,6 +36,7 @@ class PrivateLinkResource(CustomResource):
         include_resource_uri = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
+        always_return_data=True
         
 class PrivateInvestigacion(CustomResource):
     links = fields.ToManyField(PrivateLinkResource, 'links', related_name='links', full=True)
