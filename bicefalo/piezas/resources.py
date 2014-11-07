@@ -214,7 +214,7 @@ class Clasificacion (CustomResource):
         filtering={'coleccion':ALL, 'categoria':ALL}
         
     def hydrate_coleccion(self, bundle):
-        from colecciones.models import Coleccion
+        from piezas.models import Coleccion
         coleccion = bundle.data['coleccion']
         col = Coleccion.objects.get(nombre='coleccion')
         if col:
@@ -224,7 +224,7 @@ class Clasificacion (CustomResource):
         return bundle
     
     def hydrate_categoria(self, bundle):
-        from colecciones.models import Categoria
+        from piezas.models import Categoria
         categoria = bundle.data['categoria']
         cat = Categoria.objects.get(nombre='categoria')
         if cat:
