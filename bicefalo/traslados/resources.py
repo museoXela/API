@@ -38,7 +38,7 @@ class Traslado(CustomResource):
             usuario = User.objects.get(username=usuario).perfil
             bundle.data['responsable'] = usuario
         return bundle
-
+    '''
     def hydrate_caja(self, bundle):
         from tastypie import http
         caja = bundle.data.get('caja', None)
@@ -48,7 +48,7 @@ class Traslado(CustomResource):
                 bundle.data['caja']=caja
                 return bundle
             else:
-                raise http.HttpBadRequest('Traslado debe degfinir una caja o una vitrina')
+                raise http.HttpBadRequest('Traslado debe definir una caja o una vitrina')
         return bundle
 
     def hydrate_vitrina(self, bundle):
@@ -62,8 +62,7 @@ class Traslado(CustomResource):
             else:
                 raise http.HttpBadRequest('Traslado debe definir una caja o una vitrina')
         return bundle
-
-
+        '''
 class Caja(CustomResource):
     class Meta:
         queryset= Cajas.objects.all()

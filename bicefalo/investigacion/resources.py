@@ -42,14 +42,14 @@ class PrivateInvestigacion(CustomResource):
     editor = fields.CharField(attribute='editor')
     autor = fields.IntegerField(attribute='autor_id')
     piezas = fields.ToManyField(CustomPieza, attribute='piezas')
-    always_return_data=True
-    
+        
     class Meta:
         queryset = Investigaciones.objects.all()
         resource_name = 'investigaciones'
         allowed_methods=['get','put','post']
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
+        always_return_data=True
     
     def hydrate_editor(self, bundle):
         from django.contrib.auth.models import User
