@@ -29,7 +29,7 @@ class LinkResource(CustomResource):
         include_resource_uri = False
         
 class PrivateLinkResource(CustomResource):    
-    investigacion = fields.RelatedField('PrivateInvestigacion', 'investigacion_id', related_name='investigacion')
+    investigacion = fields.IntegerField(null=True, attribute='invetigacion_id')
     class Meta:
         queryset = LinkInvestigacion.objects.all()
         resource_name = 'links'
