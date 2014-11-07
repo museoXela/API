@@ -41,18 +41,14 @@ class Traslado(CustomResource):
 
     def hydrate_caja(self, bundle):
         from tastypie import http
-        from django.db.models import exceptions
         caja = bundle.data['caja']
         if caja:
-            try:
-                caja = Cajas.objects.get(id=caja)
-                if caja:
-                    bundle.data['caja']=caja
-                    return bundle
-                else:
-                    raise http.HttpBadRequest('Traslado debe degfinir una caja o una vitrina')
-            except exceptions.ObjectDoesNotExist:
-                raise http.HttpNotFound('no existe una vitrina con ese número de registro')
+            caja = Cajas.objects.get(id=caja)
+            if caja:
+                bundle.data['caja']=caja
+                return bundle
+            else:
+                raise http.HttpBadRequest('Traslado debe degfinir una caja o una vitrina')
 
     def hydrate_vitrina(self, bundle):
         from tastypie import http
