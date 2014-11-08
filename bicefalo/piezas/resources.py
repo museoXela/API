@@ -200,9 +200,9 @@ class Fotografia (CustomResource):
         authentication = OAuth20Authentication()
         
 class Clasificacion (CustomResource):
-    coleccion = fields.CharField(attribute='coleccion')
-    categoria = fields.CharField(attribute='categoria')
-    ficha = fields.CharField(attribute='ficha')
+    coleccion = fields.CharField(attribute='coleccion_id')
+    categoria = fields.CharField(attribute='categoria_id')
+    ficha = fields.CharField(attribute='ficha_id')
     
     class Meta:
         queryset = Clasificaciones.objects.all()
@@ -213,35 +213,6 @@ class Clasificacion (CustomResource):
         authentication = OAuth20Authentication()
         filtering={'coleccion':ALL, 'categoria':ALL}
         
-    def hydrate_coleccion(self, bundle):
-        from piezas.models import Coleccion
-        coleccion = bundle.data['coleccion']
-        col = Coleccion.objects.get(nombre='coleccion')
-        if col:
-            bundle.data['coleccion'] = col
-        else:
-            raise http.HttpNotFound('no existe una coleccion con el nombre %s' % coleccion)
-        return bundle
-    
-    def hydrate_categoria(self, bundle):
-        from piezas.models import Categoria
-        categoria = bundle.data['categoria']
-        cat = Categoria.objects.get(nombre='categoria')
-        if cat:
-            bundle.data['categoria'] = cat
-        else:
-            raise http.HttpNotFound('no existe una categoria con el nombre %s' % categoria)
-        return bundle
-    
-    def hydrate_ficha(self, bundle):
-        from registro.models import Ficha
-        ficha = bundle.data['ficha']
-        ficha_reg = Ficha.objects.get(nombre=ficha)
-        if ficha_reg:
-            bundle.data['ficha']= ficha_reg
-        else:
-            raise http.HttpNotFound('no existe una ficha con el nombre %s' % ficha)
-        return bundle
     
 class PublicClasificacion(CustomResource):
     class Meta:
