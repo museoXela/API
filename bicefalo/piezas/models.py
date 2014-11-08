@@ -19,7 +19,6 @@ class Autor(models.Model):
     
 class Pieza(models.Model):
     from usuarios.models import Perfil
-
     codigo = models.CharField(primary_key=True, max_length=20)
     clasificacion = models.ForeignKey('Clasificacion', related_name='piezas')
     autor = models.ForeignKey(Autor, blank=True, null=True, related_name='creaciones')
@@ -36,11 +35,11 @@ class Pieza(models.Model):
     observaciones = models.TextField(blank=True)
     maestra = models.BooleanField(default=False, blank=True)
     exhibicion = models.BooleanField(default=False, blank =True)
-    altura = models.FloatField(blank=True, null=True)
-    ancho = models.FloatField(blank=True, null=True)
-    grosor = models.FloatField(blank=True, null=True)
-    largo = models.FloatField(blank=True, null=True)
-    diametro = models.FloatField(blank=True, null=True)
+    altura = models.FloatField(default=0,blank=True, null=True)
+    ancho = models.FloatField(default=0, blank=True, null=True)
+    grosor = models.FloatField(default=0, blank=True, null=True)
+    largo = models.FloatField(default=0,blank=True, null=True)
+    diametro = models.FloatField(default=0,blank=True, null=True)
     fechamiento = models.CharField(blank=True, null=True, max_length=100)
     resumen = models.CharField(blank=True, null=True, max_length=140)
         
