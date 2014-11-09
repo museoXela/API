@@ -14,6 +14,7 @@ from django.conf.urls import url
 # Create your views here.
 
 class Pieza (CustomResource):
+    fotografia = fields.CharField(null=True)
     exclude_master = ['altura','ancho', 'diametro', 'grosor','largo', 'maestra']
     clasificacion = fields.CharField(null=True, attribute='clasificacion_id')
     autor = fields.CharField(null=True, attribute='autor_id')
@@ -38,7 +39,9 @@ class Pieza (CustomResource):
                      'nombre':ALL,
                      'codigo':ALL,                  
         } 
-        
+    def dehydrate_fotografia(self, bundle):
+        return bundle.obj.get_profile_image()
+    
     def hydrate_responsableRegistro(self, bundle):
         from django.contrib.auth.models import User
         user = bundle.data.get('responsableRegistro', None)
