@@ -213,7 +213,7 @@ class Clasificacion (CustomResource):
     coleccion = fields.CharField(attribute='coleccion_id')
     categoria = fields.CharField(attribute='categoria_id')
     ficha = fields.CharField(attribute='ficha_id')
-    
+    piezas = fields.IntegerField(readonly=True)
     class Meta:
         queryset = Clasificaciones.objects.all()
         resource_name='clasificacion'
@@ -223,6 +223,8 @@ class Clasificacion (CustomResource):
         authentication = OAuth20Authentication()
         filtering={'coleccion':ALL, 'categoria':ALL}
         
+    def dehydrate_piezas(self, bundle):
+        return bundle.obj.get_piezas_count()
     
 class PublicClasificacion(CustomResource):
     class Meta:

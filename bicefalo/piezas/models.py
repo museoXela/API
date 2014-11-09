@@ -62,6 +62,7 @@ class Pieza(models.Model):
     
     def get_clasificacion(self):
         return unicode(self.clasificacion)
+    
     def __unicode__(self):
         return self.codigo
     
@@ -85,6 +86,7 @@ class Fotografia(models.Model):
         db_table='Fotografia'
         verbose_name='fotografía'
         verbose_name_plural='fotografías'
+        
     def __unicode__(self):
         return unicode(self.ruta)
     
@@ -102,7 +104,10 @@ class Clasificacion(models.Model):
         
     def __unicode__(self):
         return self.nombre
-
+    
+    def get_piezas_count(self):
+        return self.piezas.count()
+    
 class Categoria(models.Model):
     nombre = models.CharField(max_length=50, unique=True)
     colecciones = models.ManyToManyField('Coleccion', through='Clasificacion')
