@@ -18,6 +18,7 @@ class Groups(CustomResource):
         allowed_methods=['get']
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
+        
     def registrar_usuario(self, request, **kwargs):
         from django.contrib.auth import authenticate, login
         from tastypie import http
@@ -146,6 +147,19 @@ class UserResource(CustomResource):
             Users.objects.create_user(data['username'], data['email'], data['password'])
             return self.create_response(request,{'mensaje':'Usuario creado con éxito'}, response_class=http.HttpCreated)
         return self.create_response(request,{'error':'solo se admite el método POST'}, response_class=http.HttpMethodNotAllowed)
+    
+    def get_permissions(self, request, **kwargs):
+        from tastypie import http
+        if request.method == 'GET':
+            username = kwargs.get('username', None)
+            if username:
+                user = Users.objects.get_by_natural_key(username)
+                permissions = user.get_group_permissions()
+                permissions = list(permissions)
+                return self.create_response(request, {'permisos':permissions})
+            return self.create_response(request, {'error':'Verifica el nombre de usuario'}, response_class=http.HttpNotFound)        
+        return self.create_response(request, {'error':'Solo se admite el método POST'},response_class=http.HttpMethodNotAllowed)
+    
     def get_resumen(self, request, **kwargs):
         from tastypie import http
         from usuarios.models import Perfil as perfil
@@ -165,6 +179,7 @@ class UserResource(CustomResource):
         from django.conf.urls import url
         return [
             url(r'^usuarios/(?P<username>\w+)/$', self.wrap_view('dispatch_detail'), name='api_dispatch_detail'),
+           url(r'^usuarios/(?P<username>\w+)/permisos/$', self.wrap_view('get_permissions'), name='api_dispatch_detail'),
             url(r'^login/$', self.wrap_view('login'), name='login'),
             url(r'^logout/$', self.wrap_view('logout'), name='logout'),
             url(r'^registrar/$', self.wrap_view('create'), name='create_user'),

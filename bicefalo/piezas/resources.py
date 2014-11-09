@@ -39,6 +39,13 @@ class Pieza (CustomResource):
                      'codigo':ALL,                  
         } 
         
+    def hydrate_responsableRegistro(self, bundle):
+        from django.contrib.auth.models import User
+        user = bundle.data.get('responsableRegistro', None)
+        user = User.objects.get_by_natural_key(user)
+        bundle.data['responsableRegistro'] = user.perfil
+        return bundle
+    
     def get_object_list(self, request):
         objects = super(Pieza, self).get_object_list(request)
         if request.GET:

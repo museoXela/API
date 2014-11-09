@@ -51,6 +51,7 @@ class PrivateInvestigacion(CustomResource):
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
         always_return_data=True
+        filtering={'titulo':ALL, 'editor':ALL, 'autor':ALL}
     
     def hydrate_editor(self, bundle):
         from django.contrib.auth.models import User
