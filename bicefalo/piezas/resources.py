@@ -216,9 +216,10 @@ class Fotografia (CustomResource):
         from models import Fotografia as Fotos
         pieza = bundle.data.get('pieza', None)
         foto = Fotos.objects.get(pieza=pieza, perfil=True)
+        perfil = bundle.data.get('perfil')
         if foto and pieza:
             past_foto = Piezas.objects.get(codigo=pieza).get_image()
-            if past_foto:
+            if past_foto and perfil:
                 past_foto.perfil = False
                 past_foto.save()
         return bundle
