@@ -48,6 +48,13 @@ class Pieza(models.Model):
         verbose_name='pieza'
         verbose_name_plural='piezas'
         
+    def get_image(self):
+        try:
+            foto = Fotografia.objects.filter(pieza = self).all()
+            return foto.get(perfil=True)
+        except:
+            return None
+        
     def get_profile_image(self):
         try:
             foto = Fotografia.objects.filter(pieza = self).all()
@@ -78,7 +85,7 @@ class Fotografia(models.Model):
     from operaciones.models import Mantenimiento
     mantenimiento = models.ForeignKey(Mantenimiento, blank=True, null=True, related_name='fotografias')
     pieza = models.ForeignKey('Pieza', blank=True, null=True)
-    tipo = models.SmallIntegerField(blank=True)
+    tipo = models.SmallIntegerField(default=1,blank=True)
     ruta = models.URLField()
     perfil = models.BooleanField(default=True)
     

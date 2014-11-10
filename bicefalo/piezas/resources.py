@@ -202,6 +202,8 @@ class Autor (CustomResource):
             raise http.HttpNotFound('El pais con el codigo %s no existe'%country_name)
     
 class Fotografia (CustomResource):
+    mantenimiento = fields.CharField(null=True, attribute='mantenimiento_id')
+    pieza = fields.CharField(null=True, attribute='pieza_id')
     class Meta:
         queryset = Fotografia.objects.all()
         resource_name='fotografias'
@@ -210,6 +212,16 @@ class Fotografia (CustomResource):
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
         
+    def hydrate_perfil(self, bundle):
+        from models import Fotografia as Fotos
+        pieza = bundle.data.get('pieza', None)
+        foto = Fotos.objects.get(pieza=pieza, perfil=True)
+        if foto and pieza:
+            past_foto = Piezas.objects.get(codigo=pieza).get_image()
+            if past_foto:
+                past_foto.perfil = False
+                past_foto.save()
+        return bundle
 class Clasificacion (CustomResource):
     coleccion = fields.CharField(attribute='coleccion_id')
     categoria = fields.CharField(attribute='categoria_id')
