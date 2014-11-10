@@ -14,20 +14,10 @@ class Mantenimiento(CustomResource):
 		authorization = DjangoAuthorization()
 		authentication = OAuth20Authentication()
 		
-	def dehydrate_consolidacion(self, bundle):
-		return bundle.obj.consolidacion.pk	
-	
-	def hydrate_consolidacion(self, bundle):
-		from models import Consolidacion as Parent
-		cons = bundle.data['consolidacion']
-		if cons:
-			cons = Parent.objects.get(id=cons)
-			bundle.data['consolidacion']= cons
-		return bundle
-		
 class Consolidacion(CustomResource):
+	mantenimientos = fields.ToManyField('Mantenimiento', 'mantenimientos', related_name='mantenimientos', full=True)
 	responsable = fields.CharField(attribute='responsable')
-	pieza = fields.CharField(attribute='pieza')
+	pieza = fields.CharField(attribute='pieza_id')
 	
 	class Meta:
 		queryset= Consolidacion.objects.all()

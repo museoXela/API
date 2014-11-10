@@ -5,7 +5,7 @@ class Mantenimiento(models.Model):
 	procedimiento = models.IntegerField(null=True, blank=True)
 	metodoMaterial = models.CharField(null=True,blank=True,max_length=200)
 	fecha = models.DateField(blank=True, null=True)
-	consolidacion = models.ForeignKey('Consolidacion')
+	consolidacion = models.ForeignKey('Consolidacion', related_name='mantenimientos')
 	
 	class Meta:
 		db_table='Mantenimiento'
