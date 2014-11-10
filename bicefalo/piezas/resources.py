@@ -19,6 +19,7 @@ class Pieza (CustomResource):
     clasificacion = fields.CharField(null=True, attribute='clasificacion_id')
     autor = fields.CharField(null=True, attribute='autor_id')
     responsableRegistro = fields.CharField(null=True, attribute='responsableRegistro')
+    pais = fields.CharField(attribute='pais_id', null=True)
     class Meta:
         queryset = Piezas.objects.all()
         resource_name='piezas'
