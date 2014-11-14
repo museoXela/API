@@ -15,7 +15,7 @@ class Mantenimiento(CustomResource):
 		authentication = OAuth20Authentication()
 		
 class Consolidacion(CustomResource):
-	mantenimientos = fields.ToManyField('Mantenimiento', 'mantenimientos', related_name='mantenimientos', full=True)
+	mantenimientos = fields.ToManyField(Mantenimiento, related_name='mantenimientos', full=True)
 	responsable = fields.CharField(attribute='responsable')
 	pieza = fields.CharField(attribute='pieza_id')
 	
