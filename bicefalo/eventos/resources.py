@@ -14,7 +14,7 @@ class EventosResource(CustomResource):
     class Meta:
         queryset=  Eventos.objects.all()
         resource_name= 'eventos'
-        allowed_methods=['get','post','put']
+        allowed_methods=['get','post','put','delete']
         always_return_data = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()

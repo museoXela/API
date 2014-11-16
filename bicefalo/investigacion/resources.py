@@ -48,7 +48,7 @@ class PrivateInvestigacion(CustomResource):
     class Meta:
         queryset = Investigaciones.objects.all()
         resource_name = 'investigaciones'
-        allowed_methods=['get','put','post']
+        allowed_methods=['get','put','post','delete']
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
         always_return_data=True

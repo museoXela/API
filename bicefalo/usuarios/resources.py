@@ -53,7 +53,7 @@ class UserResource(CustomResource):
         resource_name = 'usuarios'
         fields = ['username','date_joined','first_name','last_name','is_staff','email','is_active']
         detail_uri_name = 'username'
-        allowed_methods=['get','put']
+        allowed_methods=['get','put','delete']
         always_return_data = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()

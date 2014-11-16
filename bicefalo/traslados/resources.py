@@ -17,7 +17,7 @@ class Traslado(CustomResource):
     class Meta:
         queryset= Traslado.objects.all()
         resource_name= 'traslados'
-        allowed_methods=['get','post','put']
+        allowed_methods=['get','post','put','delete']
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
         filtering = {'pieza':ALL, 'caja':ALL, 'vitrina':ALL, 'responsable':ALL}
@@ -43,7 +43,7 @@ class Caja(CustomResource):
     class Meta:
         queryset= Cajas.objects.all()
         resource_name= 'cajas'
-        allowed_methods=['get','post','put']
+        allowed_methods=['get','post','put','delete']
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
         filtering = {'codigo':ALL,}
@@ -52,7 +52,7 @@ class Sala(CustomResource):
     class Meta:
         queryset= Salas.objects.all()
         resource_name= 'salas'
-        allowed_methods=['get','post','put']
+        allowed_methods=['get','post','put','delete']
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
         filtering = {'nombre':ALL,'id':ALL}
@@ -62,7 +62,7 @@ class Vitrina(CustomResource):
     class Meta:
         queryset= Vitrinas.objects.all()
         resource_name= 'vitrina'
-        allowed_methods=['get','post','put']
+        allowed_methods=['get','post','put','delete']
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
         filtering = {'numero':ALL, 'sala':ALL,}

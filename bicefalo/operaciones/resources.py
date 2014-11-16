@@ -9,7 +9,7 @@ class Mantenimiento(CustomResource):
 	class Meta:
 		queryset= Mantenimiento.objects.all()
 		resource_name= 'mantenimiento'
-		allowed_methods=['get','post','put']
+		allowed_methods=['get','post','put','delete']
 		always_return_data = True
 		authorization = DjangoAuthorization()
 		authentication = OAuth20Authentication()
@@ -22,7 +22,7 @@ class Consolidacion(CustomResource):
 	class Meta:
 		queryset= Consolidacion.objects.all()
 		resource_name= 'consolidacion'
-		allowed_methods=['get','post','put']
+		allowed_methods=['get','post','put', 'delete']
 		always_return_data = True
 		authorization = DjangoAuthorization()
 		authentication = OAuth20Authentication()

@@ -24,7 +24,7 @@ class Pieza (CustomResource):
         queryset = Piezas.objects.all()
         resource_name='piezas'
         excludes = ['codigoSlug']
-        allowed_methods=['get','post','put']
+        allowed_methods=['get','post','put','delete']
         always_return_data = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
@@ -180,7 +180,7 @@ class Autor (CustomResource):
     class Meta:
         queryset = Autor.objects.all()
         resource_name='autores'
-        allowed_methods=['get','post','put']
+        allowed_methods=['get','post','put','delete']
         fields = ['id','nombre', 'apellido']
         always_return_data = False
         authorization = DjangoAuthorization()
@@ -207,7 +207,7 @@ class Fotografia (CustomResource):
     class Meta:
         queryset = Fotografia.objects.all()
         resource_name='fotografias'
-        allowed_methods=['get','post','put']
+        allowed_methods=['get','post','put','delete']
         always_return_data = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
@@ -230,7 +230,7 @@ class Clasificacion (CustomResource):
     class Meta:
         queryset = Clasificaciones.objects.all()
         resource_name='clasificacion'
-        allowed_methods=['get','post','put']
+        allowed_methods=['get','post','put','delete']
         always_return_data = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()

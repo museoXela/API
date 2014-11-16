@@ -11,7 +11,7 @@ class Ficha(CustomResource):
         queryset = Ficha.objects.all()
         resource_name='fichas'
         fields=['id','nombre','consolidacion']
-        allowed_methods=['get','post','put']
+        allowed_methods=['get','post','put','delete']
         always_return_data = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()

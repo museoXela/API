@@ -9,7 +9,7 @@ class Categoria(CustomResource):
     class Meta:
         queryset = Categorias.objects.all()
         resource_name='categorias'
-        allowed_methods=['get','post','put']
+        allowed_methods=['get','post','put','delete']
         always_return_data = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
@@ -26,7 +26,7 @@ class Coleccion(CustomResource):
     class Meta:
         queryset = Colecciones.objects.all()
         resource_name='colecciones'
-        allowed_methods=['get','post','put']
+        allowed_methods=['get','post','put','delete']
         always_return_data = False
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
