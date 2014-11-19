@@ -6,6 +6,7 @@ class Ficha(models.Model):
     nombre = models.CharField(unique=True,max_length=50)
     estructura = fields.JSONField()
     consolidacion = models.BooleanField(default=False)
+    imagen = models.URLField(blank=True, null=True)
     class Meta:
         db_table='Ficha'
         verbose_name='ficha de registro'

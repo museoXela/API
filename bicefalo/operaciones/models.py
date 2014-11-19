@@ -18,7 +18,7 @@ class Mantenimiento(models.Model):
 class Consolidacion(models.Model):
 	from piezas.models import Pieza
 	from usuarios.models import Perfil
-	limpieza= models.BooleanField(default=False, blank=True, null=True)
+	limpieza= models.BooleanField(default=False, blank=True)
 	fechaInicio = models.DateField(blank=True,null=True)
 	fechaFin = models.DateField(blank=True,null=True)
 	responsable=models.ForeignKey(Perfil) 
