@@ -75,7 +75,7 @@ DATABASES = {
         # The following settings are not used with sqlite3:
         'USER': 'admin',
         'PASSWORD': 'hi1W_o76.yoS',
-        'HOST': 'localhost',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'HOST': '104.131.99.190',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '3306',                      # Set to empty string for default.
     }
 }
@@ -101,6 +101,6 @@ MEDIA_URL = '/media/'
 MEDIA_VERSION = '001'
 
 STATIC_URL = '/static/'
-
+STATIC_ROOT = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-2] + ['static'])
 # Security and ssl sessions
 #SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
