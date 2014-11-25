@@ -52,5 +52,7 @@ class EventosRecientes(CustomResource):
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
         
+    def dehydrate_fotoSala(self, bundle):
+        return unicode(bundle.obj.sala.fotografia)
 enabled_resources=[EventosResource]
 web_resources=[EventosRecientes]
