@@ -19,6 +19,7 @@ class EventosResource(CustomResource):
         authorization = DjangoAuthorization()
         authentication = OAuth20Authentication()
         filtering={'nombre':ALL, 'fecha':ALL,}
+        
     def dehydrate_fotoSala(self, bundle):
         return unicode(bundle.obj.sala.fotografia)
     
