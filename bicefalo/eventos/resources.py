@@ -44,7 +44,7 @@ class EventosRecientes(CustomResource):
     fotoSala = fields.CharField(null=True)
     usuario = fields.CharField(attribute='usuario')
     class Meta:
-        queryset=  Eventos.objects.filter(fecha__gte=datetime.date.today()).order_by('-fecha')
+        queryset=  Eventos.objects.filter(fecha__gte=datetime.date.today())
         resource_name= 'eventos'
         excludes=['id']
         allowed_methods=['get']

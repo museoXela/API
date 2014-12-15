@@ -3,7 +3,9 @@ from bicefalo.authentication import OAuth20Authentication
 from bicefalo.utils import CustomResource
 from tastypie.authorization import DjangoAuthorization
 from tastypie import fields, http
+from tastypie.resources import ALL
 from models import Mantenimiento, Consolidacion
+
 class Mantenimiento(CustomResource):
 	consolidacion = fields.IntegerField(attribute='consolidacion_id')
 	class Meta:
@@ -26,6 +28,7 @@ class Consolidacion(CustomResource):
 		always_return_data = True
 		authorization = DjangoAuthorization()
 		authentication = OAuth20Authentication()
+		filtering = {'pieza':ALL,}
 	
 	def hydrate_responsable(self, bundle):
 		from django.contrib.auth.models import User
