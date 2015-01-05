@@ -10,10 +10,7 @@ class Mantenimiento(models.Model):
 	class Meta:
 		db_table='Mantenimiento'
 		verbose_name='mantenimiento'
-		verbose_name_plural='mantenimientos'
-	def __unicode__(self):
-		return self.metodoMaterial + ' ' + self.fecha 
-	
+		verbose_name_plural='mantenimientos'	
 
 class Consolidacion(models.Model):
 	from piezas.models import Pieza
@@ -28,6 +25,3 @@ class Consolidacion(models.Model):
 		db_table='Consolidacion'
 		verbose_name='consolidacion'
 		verbose_name_plural='consolidaciones'
-		
-	def __unicode__(self):
-		return self.limpieza 
